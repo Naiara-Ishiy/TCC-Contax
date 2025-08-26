@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Relatórios Fiscais - Contax</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 22px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.7);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 {
+      font-size: 2.4rem;
+      color: #00d1ff;
+      letter-spacing: 2px;
+      text-shadow: 0 0 8px #00d1ffbb;
+    }
+    nav a {
+      color: #ffffff;
+      text-decoration: none;
+      margin: 0 18px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #00d1ff;
+      text-shadow: 0 0 10px #00d1ffcc;
+    }
+    main {
+      flex-grow: 1;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px 25px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0, 209, 255, 0.35);
+    }
+    main h2 {
+      color: #00d1ff;
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00d1ffcc;
+    }
+    main p {
+      font-size: 1.15rem;
+      color: #cce5f0;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    /* Exemplo de tabela de relatórios */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      color: #e0e0e0;
+      text-align: left;
+    }
+    th {
+      background-color: rgba(0, 209, 255, 0.25);
+      color: #00d1ff;
+      font-weight: 700;
+    }
+    tr:hover {
+      background-color: rgba(0, 209, 255, 0.15);
+    }
+    footer {
+      text-align: center;
+      padding: 22px 0;
+      background-color: rgba(0, 0, 0, 0.4);
+      font-size: 1rem;
+      color: #999;
+      user-select: none;
+    }
+    @media (max-width: 600px) {
+      main {
+        margin: 20px 15px;
+        padding: 15px 20px;
+      }
+      main h2 {
+        font-size: 2rem;
+      }
+      table, th, td {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Contax</h1>
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="#servicos">Serviços</a>
+      <a href="login.html">Login</a>
+      <a href="cadastro.html">Cadastro</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Relatórios Fiscais</h2>
+    <p>Aqui você pode acessar e baixar seus relatórios fiscais organizados por período. Mantenha seu negócio sempre em dia com a contabilidade.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Período</th>
+          <th>Tipo de Relatório</th>
+          <th>Data de Emissão</th>
+          <th>Download</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Janeiro 2025</td>
+          <td>Demonstrativo Contábil</td>
+          <td>05/02/2025</td>
+          <td><a href="#" style="color:#00d1ff;">Baixar <i class="fas fa-download"></i></a></td>
+        </tr>
+        <tr>
+          <td>Fevereiro 2025</td>
+          <td>Relatório Fiscal</td>
+          <td>07/03/2025</td>
+          <td><a href="#" style="color:#00d1ff;">Baixar <i class="fas fa-download"></i></a></td>
+        </tr>
+        <!-- Adicione mais linhas conforme necessário -->
+      </tbody>
+    </table>
+  </main>
+
+  <footer>
+    © 2025 Contax Contabilidade. Todos os direitos reservados.
+  </footer>
+
+</body>
+</html>
