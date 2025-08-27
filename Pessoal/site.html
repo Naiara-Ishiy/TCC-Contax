@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATUALSEMNOME - Loja Esportiva</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #c00;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    nav {
+      margin-top: 0.5rem;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 10px;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    /* Removido o link carrinho do menu, só os outros */
+    nav a.carrinhoLink {
+      display: none;
+    }
+    main {
+      padding: 1rem;
+    }
+    section {
+      margin-bottom: 2rem;
+      background: #222;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+    input, select, button {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      width: 100%;
+      max-width: 400px;
+      border: none;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #c00;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .produto-item {
+      background-color: #333;
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ADICIONADO PARA EXIBIÇÃO EM FILEIRAS LADO A LADO */
+    #listaProdutos, #produtosParaCompra {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .produto-item {
+      flex: 1 1 250px;
+      max-width: 250px;
+      box-sizing: border-box;
+    }
+    
+    .produto-item img {
+      max-width: 100%;
+      max-height: 150px;
+      object-fit: contain;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+    }
+    .produto-info {
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    footer {
+      background-color: #000;
+      text-align: center;
+      padding: 1rem;
+      color: #888;
+    }
+    .whatsapp {
+      display: inline-block;
+      background-color: #25D366;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .btn-carrinho {
+      background-color: #555;
+      margin-top: 0.5rem;
+      width: 150px;
+    }
+    #carrinhoLista .produto-item {
+      background-color: #444;
+    }
+    .total {
+      font-size: 1.2rem;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    /* Mensagens modificadas para centralizar e estilo metálico degradê */
+    #msgContainer {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #b30000, #330000);
+      color: #fff;
+      padding: 2rem 3rem;
+      border-radius: 12px;
+      box-shadow:
+        0 0 10px #ff0000,
+        inset 0 0 15px #660000;
+      font-size: 1.4rem;
+      font-weight: 900;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 9999;
+      text-align: center;
+      user-select: none;
+      letter-spacing: 1.5px;
+     -webkit-background-clip: text;
+     
+      -webkit-text-fill-color: white;
+      text-shadow:
+        0 0 5px #ff0000,
+        0 0 10px #ff0000;
+    }
+    #msgContainer.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    #msgContainer.error {
+      background: linear-gradient(135deg, #7f0000, #220000);
+      box-shadow:
+        0 0 15px #8b0000,
+        inset 0 0 20px #440000;
+    }
+    /* Painel Admin - oculto inicialmente */
+    #painelAdmin {
+      background: #111;
+      border: 2px solid #c00;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-top: 2rem;
+      display: none;
+    }
+    #painelAdmin h2 {
+      margin-top: 0;
+    }
+    #loginAdmin {
+      background: #222;
+      border: 2px solid #c00;
+      border-radius: 8px;
+      padding: 1rem;
+      max-width: 400px;
+      margin: 1rem auto;
+    }
+    #loginAdmin input {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+    /* Lista clientes */
+    .cliente-item {
+      background: #333;
+      padding: 0.5rem;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+    }
+    /* Ícone carrinho topo direito */
+    #iconeCarrinho {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background-color: #c00;
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 8px #900;
+      z-index: 10000;
+      transition: background-color 0.3s ease;
+    }
+    #iconeCarrinho:hover {
+      background-color: #a00;
+    }
+    #iconeCarrinho svg {
+      fill: white;
+      width: 26px;
+      height: 26px;
+    }
+    #contadorCarrinho {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: #fff;
+      color: #c00;
+      border-radius: 50%;
+      padding: 2px 6px;
+      font-weight: bold;
+      font-size: 0.8rem;
+      min-width: 20px;
+      text-align: center;
+      user-select: none;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ATUALSEMNOME</h1>
+    <nav>
+      <a onclick="mostrarSecao('produtos')">Produtos</a>
+      <a onclick="mostrarSecao('comprar')">Comprar</a>
+      <!-- Removido link texto Carrinho conforme pedido -->
+      <!-- <a class="carrinhoLink" onclick="mostrarSecao('carrinho')">Carrinho</a> -->
+      <a onclick="abrirPainelAdmin()">Painel Admin</a>
+      <a onclick="mostrarSecao('suporte')">Suporte</a>
+    </nav>
+  </header>
+
+  <!-- Ícone carrinho fixo no topo direito -->
+  <div id="iconeCarrinho" title="Carrinho" onclick="mostrarSecao('carrinho')">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm0 2zm10-2c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zm0 2zM7.16 14h9.17c.75 0 1.41-.41 1.75-1.03l3.58-6.49a1.003 1.003 0 0 0-.88-1.48H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 16.37 5.48 18 7 18h12v-2H7.16z"></path>
+    </svg>
+    <div id="contadorCarrinho">0</div>
+  </div>
+
+  <main>
+    <!-- Seção Produtos (visível sempre) -->
+    <section id="produtos">
+      <h2>Visualizar Produtos</h2>
+      <div id="listaProdutos"></div>
+    </section>
+
+    <!-- Seção Comprar (visível sempre) -->
+    <section id="comprar" style="display:none;">
+      <h2>Escolha seus Produtos</h2>
+      <div id="produtosParaCompra"></div>
+      <h3>Carrinho</h3>
+      <div id="carrinhoListaComprar"></div>
+      <p class="total" id="totalCarrinhoComprar">Total: R$ 0,00</p>
+      <button id="btnLimparCarrinhoComprar">Limpar Carrinho</button>
+      <button id="btnFinalizarPedidoComprar">Finalizar Pedido</button>
+    </section>
+
+    <!-- Seção Carrinho (visível sempre) -->
+    <section id="carrinho" style="display:none;">
+      <h2>Carrinho</h2>
+      <div id="carrinhoLista"></div>
+      <p class="total" id="totalCarrinho">Total: R$ 0,00</p>
+      <button id="btnLimparCarrinho">Limpar Carrinho</button>
+      <button id="btnFinalizarPedido">Finalizar Pedido</button>
+    </section>
+
+    <!-- Seção Suporte (visível sempre) -->
+    <section id="suporte" style="display:none;">
+      <h2>Suporte</h2>
+      <p>Fale com a gente pelo WhatsApp:</p>
+      <a href="https://wa.me/qr/AHZEBSOD3VEAF1" target="_blank" class="whatsapp">Abrir WhatsApp</a>
+    </section>
+
+    <!-- Painel Admin: só aparece após login -->
+    <section id="painelAdmin">
+      <h2>Painel de Administração</h2>
+
+      <!-- Área Cadastro Produto -->
+      <section id="cadastroProduto">
+        <h3>Cadastrar Produto</h3>
+        <form id="formProduto">
+          <input type="text" id="nomeProduto" placeholder="Nome do Produto" required />
+          <input type="number" id="precoProduto" placeholder="Preço" required />
+          <input type="text" id="descProduto" placeholder="Descrição" required />
+          <input type="text" id="imgProduto" placeholder="URL da imagem (opcional)" />
+          <input type="file" id="uploadImgProduto" accept="image/*" />
+          <button type="submit">Cadastrar</button>
+        </form>
+      </section>
+
+      <!-- Área Cadastro Cliente -->
+      <section id="cadastroCliente" style="margin-top: 2rem;">
+        <h3>Cadastro de Cliente</h3>
+        <form id="formCliente">
+          <input type="text" id="nomeCliente" placeholder="Nome Completo" required />
+          <input type="text" id="cpfCliente" placeholder="CPF" required />
+          <input type="text" id="enderecoCliente" placeholder="Endereço de Entrega" required />
+          <input type="email" id="emailCliente" placeholder="Email" required />
+          <input type="tel" id="telefoneCliente" placeholder="Telefone" required />
+          <button type="submit">Cadastrar</button>
+        </form>
+      </section>
+
+      <!-- Área Histórico Compras -->
+      <section id="historicoCompras" style="margin-top: 2rem;">
+        <h3>Histórico de Compras</h3>
+        <div id="listaHistorico"></div>
+      </section>
+
+      <!-- Área Clientes Cadastrados -->
+      <section id="clientesCadastrados" style="margin-top: 2rem;">
+        <h3>Clientes Cadastrados</h3>
+        <div id="listaClientes"></div>
+      </section>
+
+      <button style="margin-top: 2rem;" onclick="fecharPainelAdmin()">Fechar Painel Admin</button>
+    </section>
+
+    <!-- Login Admin -->
+    <section id="loginAdmin">
+      <h2>Login do Painel Admin</h2>
+      <input type="password" id="senhaAdmin" placeholder="Digite a senha" />
+      <button onclick="logarAdmin()">Entrar</button>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2025 ATUALSEMNOME. Todos os direitos reservados.</p>
+  </footer>
+
+  <div id="msgContainer"></div>
+
+<script>
+  // Mensagens temporárias
+  const msgContainer = document.getElementById("msgContainer");
+  function mostrarMensagem(msg, tipo = "info") {
+    msgContainer.textContent = msg;
+    msgContainer.className = "";
+    if(tipo === "erro" || tipo === "error") {
+      msgContainer.classList.add("error");
+    }
+    msgContainer.classList.add("show");
+    setTimeout(() => {
+      msgContainer.classList.remove("show");
+    }, 3000);
+  }
+
+  // Controle de seções visíveis
+  function mostrarSecao(id) {
+    const secoes = ["produtos", "comprar", "carrinho", "suporte", "painelAdmin", "loginAdmin"];
+    secoes.forEach(sec => {
+      document.getElementById(sec).style.display = (sec === id) ? "block" : "none";
+    });
+  }
+
+  // Inicial - mostrar produtos e suporte, esconder painel admin e login
+  mostrarSecao("produtos");
+
+  // Produtos e carrinho
+  const listaProdutos = document.getElementById("listaProdutos");
+  const produtosParaCompra = document.getElementById("produtosParaCompra");
+  const carrinhoLista = document.getElementById("carrinhoLista");
+  const totalCarrinho = document.getElementById("totalCarrinho");
+
+  const carrinhoListaComprar = document.getElementById("carrinhoListaComprar");
+  const totalCarrinhoComprar = document.getElementById("totalCarrinhoComprar");
+  const btnLimparCarrinhoComprar = document.getElementById("btnLimparCarrinhoComprar");
+  const btnFinalizarPedidoComprar = document.getElementById("btnFinalizarPedidoComprar");
+
+  const contadorCarrinho = document.getElementById("contadorCarrinho");
+
+  let produtos = JSON.parse(localStorage.getItem("produtos")) || [];
+  let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+
+  function validarURL(str) {
+    try {
+      new URL(str);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function atualizarListaProdutos() {
+    listaProdutos.innerHTML = "";
+    produtosParaCompra.innerHTML = "";
+
+    produtos.forEach((produto, index) => {
+      const item = document.createElement("div");
+      item.className = "produto-item";
+
+      let imgSrc = produto.img || "";
+      if(imgSrc && !validarURL(imgSrc) && !imgSrc.startsWith("data:image")) imgSrc = "";
+
+      item.innerHTML = `
+        ${imgSrc ? `<img src="${imgSrc}" alt="Imagem de ${produto.nome}" />` : ""}
+        <div class="produto-info">
+          <h3>${produto.nome}</h3>
+          <p>${produto.desc}</p>
+          <strong>R$ ${parseFloat(produto.preco).toFixed(2)}</strong>
+        </div>
+      `;
+
+      // Botão comprar embaixo do produto (área Visualizar Produtos)
+      const btnComprar = document.createElement("button");
+      btnComprar.className = "btn-carrinho";
+      btnComprar.textContent = "Comprar";
+      btnComprar.onclick = () => {
+        adicionarAoCarrinho(produto);
+        mostrarMensagem(`Produto "${produto.nome}" adicionado ao carrinho.`);
+      };
+      item.appendChild(btnComprar);
+
+      listaProdutos.appendChild(item);
+
+      // Para área compra
+      const itemCompra = item.cloneNode(true);
+      // remover botão duplicado que vem da cópia
+      // pois no "comprar" já tem botão próprio no código antigo
+      // Então vamos deixar só o original, para não ter botão duplicado lá
+      const btnsDuplicados = itemCompra.querySelectorAll("button");
+      btnsDuplicados.forEach(b => b.remove());
+
+      const btn = document.createElement("button");
+      btn.className = "btn-carrinho";
+      btn.textContent = "Adicionar ao Carrinho";
+      btn.onclick = () => adicionarAoCarrinho(produto);
+      itemCompra.appendChild(btn);
+      produtosParaCompra.appendChild(itemCompra);
+    });
+  }
+
+  function atualizarContadorCarrinho() {
+    const quantidade = carrinho.length;
+    contadorCarrinho.textContent = quantidade;
+    contadorCarrinho.style.display = quantidade > 0 ? "block" : "none";
+  }
+
+  function adicionarAoCarrinho(produto) {
+    carrinho.push(produto);
+    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    atualizarCarrinho();
+    atualizarCarrinhoComprar();
+    atualizarContadorCarrinho();
+    // A mensagem de adicionar no carrinho será mostrada só na lista de produtos (com botão "Comprar")
+  }
+
+  // Atualizar carrinho da aba Carrinho
+  function atualizarCarrinho() {
+    carrinhoLista.innerHTML = "";
+    if(carrinho.length === 0) {
+      carrinhoLista.innerHTML = "<p>Carrinho vazio.</p>";
+      totalCarrinho.textContent = "Total: R$ 0,00";
+      return;
+    }
+    let soma = 0;
+    carrinho.forEach((produto, i) => {
+      const div = document.createElement("div");
+      div.className = "produto-item";
+      div.innerHTML = `
+        <div class="produto-info">
+          <h4>${produto.nome}</h4>
+          <p>${produto.desc}</p>
+          <strong>R$ ${parseFloat(produto.preco).toFixed(2)}</strong>
+        </div>
+      `;
+      const btnRemover = document.createElement("button");
+      btnRemover.textContent = "Remover";
+      btnRemover.onclick = () => {
+        carrinho.splice(i, 1);
+        localStorage.setItem("carrinho", JSON.stringify(carrinho));
+        atualizarCarrinho();
+        atualizarCarrinhoComprar();
+        atualizarContadorCarrinho();
+      };
+      div.appendChild(btnRemover);
+      carrinhoLista.appendChild(div);
+      soma += parseFloat(produto.preco);
+    });
+    totalCarrinho.textContent = `Total: R$ ${soma.toFixed(2)}`;
+  }
+
+  // Atualizar carrinho da aba Comprar
+  function atualizarCarrinhoComprar() {
+    carrinhoListaComprar.innerHTML = "";
+    if(carrinho.length === 0) {
+      carrinhoListaComprar.innerHTML = "<p>Carrinho vazio.</p>";
+      totalCarrinhoComprar.textContent = "Total: R$ 0,00";
+      return;
+    }
+    let soma = 0;
+    carrinho.forEach((produto, i) => {
+      const div = document.createElement("div");
+      div.className = "produto-item";
+      div.innerHTML = `
+        <div class="produto-info">
+          <h4>${produto.nome}</h4>
+          <p>${produto.desc}</p>
+          <strong>R$ ${parseFloat(produto.preco).toFixed(2)}</strong>
+        </div>
+      `;
+      const btnRemover = document.createElement("button");
+      btnRemover.textContent = "Remover";
+      btnRemover.onclick = () => {
+        carrinho.splice(i, 1);
+        localStorage.setItem("carrinho", JSON.stringify(carrinho));
+        atualizarCarrinhoComprar();
+        atualizarCarrinho();
+        atualizarContadorCarrinho();
+      };
+      div.appendChild(btnRemover);
+      carrinhoListaComprar.appendChild(div);
+      soma += parseFloat(produto.preco);
+    });
+    totalCarrinhoComprar.textContent = `Total: R$ ${soma.toFixed(2)}`;
+  }
+
+  document.getElementById("btnLimparCarrinho").onclick = () => {
+    carrinho = [];
+    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    atualizarCarrinho();
+    atualizarCarrinhoComprar();
+    atualizarContadorCarrinho();
+    mostrarMensagem("Carrinho limpo.");
+  };
+  document.getElementById("btnFinalizarPedido").onclick = () => {
+    if(carrinho.length === 0) {
+      mostrarMensagem("O carrinho está vazio.", "erro");
+      return;
+    }
+    finalizarPedido();
+  };
+
+  btnLimparCarrinhoComprar.onclick = () => {
+    carrinho = [];
+    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    atualizarCarrinhoComprar();
+    atualizarCarrinho();
+    atualizarContadorCarrinho();
+    mostrarMensagem("Carrinho limpo.");
+  };
+  btnFinalizarPedidoComprar.onclick = () => {
+    if(carrinho.length === 0) {
+      mostrarMensagem("O carrinho está vazio.", "erro");
+      return;
+    }
+    finalizarPedido();
+  };
+
+  function finalizarPedido() {
+    const pedido = {
+      data: new Date().toISOString(),
+      itens: [...carrinho],
+      total: carrinho.reduce((acc, p) => acc + parseFloat(p.preco), 0)
+    };
+    salvarHistorico(pedido);
+    carrinho = [];
+    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+    atualizarCarrinho();
+    atualizarCarrinhoComprar();
+    atualizarContadorCarrinho();
+    atualizarHistoricoCompras();
+    mostrarMensagem("Pedido finalizado com sucesso!");
+  }
+
+  // Produtos cadastro (Painel Admin)
+  const formProduto = document.getElementById("formProduto");
+  formProduto.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const nome = document.getElementById("nomeProduto").value.trim();
+    const preco = parseFloat(document.getElementById("precoProduto").value);
+    const desc = document.getElementById("descProduto").value.trim();
+    let img = document.getElementById("imgProduto").value.trim();
+
+    if(!nome || !preco || !desc) {
+      mostrarMensagem("Preencha todos os campos obrigatórios.", "erro");
+      return;
+    }
+
+    // Upload de imagem - base64
+    const uploadInput = document.getElementById("uploadImgProduto");
+    if(uploadInput.files.length > 0) {
+      const file = uploadInput.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        img = e.target.result;
+        adicionarProduto(nome, preco, desc, img);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      adicionarProduto(nome, preco, desc, img);
+    }
+  });
+
+  function adicionarProduto(nome, preco, desc, img) {
+    produtos.push({ nome, preco, desc, img });
+    localStorage.setItem("produtos", JSON.stringify(produtos));
+    mostrarMensagem("Produto cadastrado com sucesso!");
+    formProduto.reset();
+    atualizarListaProdutos();
+    atualizarCarrinhoComprar();
+  }
+
+  // Cadastro clientes (Painel Admin)
+  const formCliente = document.getElementById("formCliente");
+  formCliente.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const nome = document.getElementById("nomeCliente").value.trim();
+    const cpf = document.getElementById("cpfCliente").value.trim();
+    const endereco = document.getElementById("enderecoCliente").value.trim();
+    const email = document.getElementById("emailCliente").value.trim();
+    const telefone = document.getElementById("telefoneCliente").value.trim();
+
+    if(!nome || !cpf || !endereco || !email || !telefone) {
+      mostrarMensagem("Preencha todos os campos obrigatórios.", "erro");
+      return;
+    }
+
+    let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+    if(clientes.some(c => c.email === email)) {
+      mostrarMensagem("Email já cadastrado.", "erro");
+      return;
+    }
+
+    clientes.push({ nome, cpf, endereco, email, telefone });
+    localStorage.setItem("clientes", JSON.stringify(clientes));
+    mostrarMensagem("Cliente cadastrado com sucesso!");
+    formCliente.reset();
+    atualizarListaClientes();
+  });
+
+  // Histórico de Compras (simples, baseado em localStorage)
+  // Salvaremos pedidos finalizados no localStorage, lista de objetos {data, itens, total}
+  function salvarHistorico(pedido) {
+    let historico = JSON.parse(localStorage.getItem("historicoCompras")) || [];
+    historico.push(pedido);
+    localStorage.setItem("historicoCompras", JSON.stringify(historico));
+  }
+  function atualizarHistoricoCompras() {
+    const listaHistorico = document.getElementById("listaHistorico");
+    const historico = JSON.parse(localStorage.getItem("historicoCompras")) || [];
+    listaHistorico.innerHTML = "";
+    if(historico.length === 0){
+      listaHistorico.innerHTML = "<p>Nenhum pedido realizado ainda.</p>";
+      return;
+    }
+    historico.forEach((pedido, i) => {
+      const div = document.createElement("div");
+      div.className = "cliente-item";
+      const data = new Date(pedido.data);
+      let itensHTML = "";
+      pedido.itens.forEach(item => {
+        itensHTML += `<li>${item.nome} - R$ ${parseFloat(item.preco).toFixed(2)}</li>`;
+      });
+      div.innerHTML = `
+        <strong>Pedido #${i + 1} - ${data.toLocaleString()}</strong><br>
+        <ul>${itensHTML}</ul>
+        <strong>Total:</strong> R$ ${pedido.total.toFixed(2)}
+      `;
+      listaHistorico.appendChild(div);
+    });
+  }
+
+  // Login painel admin
+  const painelAdmin = document.getElementById("painelAdmin");
+  const loginAdmin = document.getElementById("loginAdmin");
+  const senhaCorreta = "rian123";
+  let adminLogado = false;
+
+  function abrirPainelAdmin(){
+    if(adminLogado){
+      mostrarSecao("painelAdmin");
+      return;
+    }
+    mostrarSecao("loginAdmin");
+  }
+
+  function logarAdmin(){
+    const senha = document.getElementById("senhaAdmin").value;
+    if(senha === senhaCorreta){
+      adminLogado = true;
+      document.getElementById("senhaAdmin").value = "";
+      mostrarSecao("painelAdmin");
+      atualizarListaProdutos();
+      atualizarCarrinho();
+      atualizarCarrinhoComprar();
+      atualizarListaClientes();
+      atualizarHistoricoCompras();
+      mostrarMensagem("Login realizado com sucesso!");
+    } else {
+      mostrarMensagem("Senha incorreta.", "erro");
+    }
+  }
+
+  function fecharPainelAdmin(){
+    adminLogado = false;
+    mostrarSecao("produtos");
+    mostrarMensagem("Painel administrativo fechado. Para abrir novamente, insira a senha.");
+  }
+
+  // Listar clientes cadastrados no painel admin
+  function atualizarListaClientes(){
+    const listaClientes = document.getElementById("listaClientes");
+    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+    listaClientes.innerHTML = "";
+    if(clientes.length === 0){
+      listaClientes.innerHTML = "<p>Nenhum cliente cadastrado.</p>";
+      return;
+    }
+    clientes.forEach(cliente => {
+      const div = document.createElement("div");
+      div.className = "cliente-item";
+      div.innerHTML = `
+        <strong>Nome:</strong> ${cliente.nome} <br>
+        <strong>CPF:</strong> ${cliente.cpf} <br>
+        <strong>Endereço:</strong> ${cliente.endereco} <br>
+        <strong>Email:</strong> ${cliente.email} <br>
+        <strong>Telefone:</strong> ${cliente.telefone}
+      `;
+      listaClientes.appendChild(div);
+    });
+  }
+
+  // Atualizar listas ao carregar
+  atualizarListaProdutos();
+  atualizarCarrinho();
+  atualizarCarrinhoComprar();
+  atualizarListaClientes();
+  atualizarHistoricoCompras();
+  atualizarContadorCarrinho();
+</script>
+</body>
+</html>
