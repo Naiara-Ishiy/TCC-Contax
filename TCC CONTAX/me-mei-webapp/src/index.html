@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ME/MEI Web Application</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <div><b>ME/MEI</b></div>
+        <small>Dashboard</small>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <nav class="nav" id="navTabs">
+      <button class="tab active" data-tab="me">ME</button>
+      <button class="tab" data-tab="mei">MEI</button>
+    </nav>
+    <div class="spacer"></div>
+    <button class="out" id="btnLogout">Sair</button>
+  </header>
+
+  <main class="wrap" id="screenApp">
+    <!-- ME TABS -->
+    <section id="tab-me" class="cards">
+      <nav class="tabs">
+        <button class="tab active" data-tab="caixa">Caixa</button>
+        <button class="tab" data-tab="despesas">Despesas</button>
+        <button class="tab" data-tab="faturamento">Faturamento</button>
+        <button class="tab" data-tab="imposto">Imposto</button>
+        <button class="tab" data-tab="notas-fiscais-emitidas">Notas Fiscais Emitidas</button>
+      </nav>
+      <div id="meContent">
+        <!-- Content for ME tabs will be dynamically loaded here -->
+      </div>
+    </section>
+
+    <!-- MEI TABS -->
+    <section id="tab-mei" class="cards hide">
+      <nav class="tabs">
+        <button class="tab" data-tab="imposto-das">Imposto DAS</button>
+        <button class="tab" data-tab="notas-emitidas">Notas Emitidas</button>
+        <button class="tab" data-tab="controle-mensal">Controle Mensal</button>
+      </nav>
+      <div id="meiContent">
+        <!-- Content for MEI tabs will be dynamically loaded here -->
+      </div>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
