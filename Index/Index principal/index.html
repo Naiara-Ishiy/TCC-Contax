@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CONTAX — Gestão de Notas ME/MEI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <div><b>CONTAX</b></div>
+        <small>ME & MEI • Dashboard</small>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <nav class="nav hide" id="navTabs">
+      <button class="tab active" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="empresas" id="tabEmpresas">Empresas</button>
+      <button class="tab" data-tab="notas" id="tabNotas">Notas Fiscais</button>
+      <!-- Abas ME -->
+      <button class="tab hide" data-tab="caixa" id="tabCaixa">Caixa</button>
+      <button class="tab hide" data-tab="despesas" id="tabDespesas">Despesas</button>
+      <button class="tab hide" data-tab="faturamento" id="tabFaturamento">Faturamento</button>
+      <button class="tab hide" data-tab="imposto" id="tabImposto">Imposto</button>
+      <button class="tab hide" data-tab="notas-emitidas-me" id="tabNotasEmitidasME">Notas Fiscais Emitidas</button>
+      <!-- Abas MEI -->
+      <button class="tab hide" data-tab="imposto-das" id="tabImpostoDAS">Imposto DAS</button>
+      <button class="tab hide" data-tab="notas-emitidas-mei" id="tabNotasEmitidasMEI">Notas Emitidas</button>
+      <button class="tab hide" data-tab="controle-mensal" id="tabControleMensal">Controle Mensal</button>
+    </nav>
+    <div class="spacer"></div>
+    <div id="who" class="muted"></div>
+    <button class="out hide" id="btnLogout">Sair</button>
+  </header>
+
+  <!-- LOGIN -->
+  <main class="wrap" id="screenLogin">
+    <div class="login">
+      <div class="brand" style="margin-bottom:8px">
+        <div class="logo"></div>
+        <div><b>CONTAX</b></div>
+      </div>
+      <h1>Bem-vindo(a)</h1>
+      <p>Escolha o tipo de acesso. Área de lançamento de notas é exclusiva do administrador.</p>
+      <form id="formLogin">
+        <label for="role">Entrar como</label>
+        <select id="role" required>
+          <option value="admin">Administrador</option>
+          <option value="empresa">Empresa</option>
+        </select>
+
+        <div id="loginAdmin">
+          <label for="adminPass">Senha do administrador</label>
+          <input id="adminPass" type="password" placeholder="Ex.: admin123" />
+        </div>
+
+        <div id="loginEmpresa" class="hide">
+          <label for="empresaSelect">Selecione sua empresa</label>
+          <select id="empresaSelect"></select>
+          <input id="empresaPass" type="password" placeholder="Senha da empresa" />
+        </div>
+
+        <button type="submit">Entrar</button>
+        <button type="button" class="secondary" id="btnSeed">Popular com dados de exemplo</button>
+      </form>
+      <div class="footer">• © CONTAX</div>
+    </div>
+  </main>
+
+  <!-- APP -->
+  <main class="wrap hide" id="screenApp">
+
+    <!-- DASHBOARD -->
+    <section id="tab-dashboard" class="cards">
+      <article class="card sm-8">
+        <h3>Visão Geral — <span id="monthLabel"></span></h3>
+        <div class="content" id="dashboardResumo">
+          <div class="muted">Nenhum dado encontrado.</div>
+        </div>
+      </article>
+
+      <article class="card sm-4">
+        <h3>Filtro</h3>
+        <div class="content">
+          <form id="formFiltro">
+            <label for="mes">Mês</label>
+            <input type="month" id="mes" />
+
+            <div id="filtroEmpresaWrap">
+              <label for="filtroEmpresa">Empresa</label>
+              <select id="filtroEmpresa"></select>
+            </div>
+
+            <button type="submit">Aplicar</button>
+          </form>
+        </div>
+      </article>
+
+      <article class="card sm-12">
+        <h3>Notas Fiscais do período</h3>
+        <div class="content">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Empresa</th>
+                <th>Descrição</th>
+                <th class="right">Valor (R$)</th>
+              </tr>
+            </thead>
+            <tbody id="tNotasPeriodo"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- EMPRESAS (ADMIN) -->
+    <section id="tab-empresas" class="cards hide">
+      <article class="card sm-5">
+        <h3>Cadastrar Empresa</h3>
+        <div class="content">
+          <form id="formEmpresa">
+            <div class="row cols-2">
+              <div>
+                <label for="nomeEmp">Nome</label>
+                <input id="nomeEmp" required placeholder="Ex.: Acme LTDA" />
+              </div>
+              <div>
+                <label for="cnpjEmp">CNPJ (opcional)</label>
+<input id="cnpjEmp" required maxlength="18" minlength="14" placeholder="00.000.000/0001-00" />
+
+              </div>
+            </div>
+            <div class="row cols-2">
+              <div>
+                <label for="tipoEmp">Tipo</label>
+                <select id="tipoEmp">
+                  <option value="MEI">MEI</option>
+                  <option value="ME">ME</option>
+                </select>
+              </div>
+              <div>
+                <label for="limiteMensal">Limite Mensal (R$)</label>
+                <input id="limiteMensal" type="number" min="0" step="0.01" placeholder="Ex.: 6750 para MEI" />
+              </div>
+            </div>
+            <button type="submit">Salvar Empresa</button>
+          </form>
+        </div>
+      </article>
+
+      <article class="card sm-7">
+        <h3>Empresas Cadastradas</h3>
+        <div class="content">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Limite Mensal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tEmpresas"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- NOTAS (ADMIN) -->
+    <section id="tab-notas" class="cards hide">
+      <article class="card sm-5">
+        <h3>Lançar Nota Fiscal (apenas Admin)</h3>
+        <div class="content">
+          <form id="formNota">
+            <label for="empresaNF">Empresa</label>
+            <select id="empresaNF"></select>
+
+            <div class="row cols-2">
+              <div>
+                <label for="dataNF">Data</label>
+                <input id="dataNF" type="date" />
+              </div>
+              <div>
+                <label for="valorNF">Valor (R$)</label>
+                <input id="valorNF" type="number" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <label for="descNF">Descrição</label>
+            <input id="descNF" placeholder="Serviço, venda, etc." />
+
+            <button type="submit">Lançar Nota</button>
+          </form>
+        </div>
+      </article>
+
+      <article class="card sm-7">
+        <h3>Notas Fiscais (todas)</h3>
+        <div class="content">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Empresa</th>
+                <th>Descrição</th>
+                <th class="right">Valor (R$)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tNotas"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- Abas ME -->
+    <section id="tab-caixa" class="cards hide">
+      <article class="card sm-12">
+        <h3>Caixa</h3>
+        <div class="content">Conteúdo Caixa ME</div>
+      </article>
+    </section>
+    <section id="tab-despesas" class="cards hide">
+      <article class="card sm-12">
+        <h3>Despesas</h3>
+        <div class="content">Conteúdo Despesas ME</div>
+      </article>
+    </section>
+    <section id="tab-faturamento" class="cards hide">
+      <article class="card sm-12">
+        <h3>Faturamento</h3>
+        <div class="content">Conteúdo Faturamento ME</div>
+      </article>
+    </section>
+    <section id="tab-imposto" class="cards hide">
+      <article class="card sm-12">
+        <h3>Imposto</h3>
+        <div class="content">Conteúdo Imposto ME</div>
+      </article>
+    </section>
+    <section id="tab-notas-emitidas-me" class="cards hide">
+      <article class="card sm-12">
+        <h3>Notas Fiscais Emitidas</h3>
+        <div class="content">Conteúdo Notas Emitidas ME</div>
+      </article>
+    </section>
+    <!-- Abas MEI -->
+    <section id="tab-imposto-das" class="cards hide">
+      <article class="card sm-12">
+        <h3>Imposto DAS</h3>
+        <div class="content">Conteúdo Imposto DAS MEI</div>
+      </article>
+    </section>
+    <section id="tab-notas-emitidas-mei" class="cards hide">
+      <article class="card sm-12">
+        <h3>Notas Emitidas</h3>
+        <div class="content">Conteúdo Notas Emitidas MEI</div>
+      </article>
+    </section>
+    <section id="tab-controle-mensal" class="cards hide">
+      <article class="card sm-12">
+        <h3>Controle Mensal</h3>
+        <div class="content">Conteúdo Controle Mensal MEI</div>
+      </article>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
