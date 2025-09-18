@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro - Contax</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* Reset e fonte */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 40px 30px;
+      border-radius: 15px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 30px;
+      color: #00d1ff;
+      font-size: 2rem;
+      letter-spacing: 1.5px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      padding: 12px 15px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      background-color: #1f2a38;
+      color: white;
+    }
+
+    input::placeholder {
+      color: #a0a0a0;
+    }
+
+    input:focus {
+      background-color: #2a3b53;
+      box-shadow: 0 0 8px #00d1ff;
+    }
+
+    button[type="submit"] {
+      background-color: #00d1ff;
+      border: none;
+      padding: 15px;
+      border-radius: 25px;
+      color: #000;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-weight: bold;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #00aacc;
+    }
+
+    .links {
+      margin-top: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .links a {
+      color: #00d1ff;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+
+    .links a:hover {
+      color: #00aacc;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Cadastro</h2>
+    <form>
+      <input type="text" placeholder="Nome completo" required />
+      <input type="email" placeholder="E-mail" required />
+      <input type="password" placeholder="Senha" required />
+      <button type="submit">Cadastrar</button>
+    </form>
+    <div class="links">
+      <a href="login.html">Já tem uma conta? Faça login</a>
+      <a href="index.html">← Voltar para o início</a>
+    </div>
+  </div>
+</body>
+</html>

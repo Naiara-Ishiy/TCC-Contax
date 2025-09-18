@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Contax</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(15, 32, 39, 0.85);
+      padding: 45px 35px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 12px 30px rgba(0, 209, 255, 0.3);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .container:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0, 209, 255, 0.5);
+    }
+    h2 {
+      margin-bottom: 35px;
+      color: #00d1ff;
+      font-size: 2.3rem;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px #00d1ffaa;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    input[type="email"],
+    input[type="password"] {
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1.1rem;
+      outline: none;
+      background-color: #1a2b3c;
+      color: #e0e0e0;
+      box-shadow: inset 0 0 6px #005f8b;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    input::placeholder {
+      color: #7eaec9;
+      font-weight: 500;
+    }
+    input:focus {
+      background-color: #25475e;
+      box-shadow: 0 0 10px #00d1ff, inset 0 0 8px #00d1ff;
+    }
+    button[type="submit"] {
+      background: linear-gradient(90deg, #00d1ff, #0099cc);
+      border: none;
+      padding: 16px 0;
+      border-radius: 30px;
+      color: #000;
+      font-size: 1.2rem;
+      cursor: pointer;
+      font-weight: 700;
+      box-shadow: 0 5px 15px #00b8f4aa;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+    button[type="submit"]:hover {
+      background: linear-gradient(90deg, #0099cc, #006680);
+      box-shadow: 0 8px 20px #007aa9cc;
+    }
+    .links {
+      margin-top: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .links a {
+      color: #00d1ff;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: color 0.3s, text-shadow 0.3s;
+      text-shadow: 0 0 6px transparent;
+    }
+    .links a:hover {
+      color: #0099cc;
+      text-shadow: 0 0 8px #00d1ff;
+      text-decoration: underline;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 35px 25px;
+      }
+      h2 {
+        font-size: 1.9rem;
+      }
+      input[type="email"],
+      input[type="password"] {
+        font-size: 1rem;
+      }
+      button[type="submit"] {
+        font-size: 1rem;
+      }
+      .links a {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Login</h2>
+    <form>
+      <input type="email" placeholder="Seu e-mail" required />
+      <input type="password" placeholder="Sua senha" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <div class="links">
+      <a href="cadastro.html">Ainda não tem uma conta? Cadastre-se</a>
+      <a href="index.html">← Voltar para o início</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CONTAX — Gestão de Notas ME/MEI</title>
+  <style>
+    :root {
+      --cyan: #00bcd4; /* ciano principal */
+      --cyan-600: #00a6bb;
+      --cyan-700: #008fa3;
+      --bg: #ffffff;   /* branco */
+      --ink: #0f172a;  /* slate-900 */
+      --muted: #64748b; /* slate-500 */
+      --line: #e2e8f0; /* slate-200 */
+      --ok: #10b981;   /* green */
+      --warn: #f59e0b; /* amber */
+      --bad: #ef4444;  /* red */
+      --chip: #f1f5f9; /* slate-100 */
+      --shadow: 0 8px 24px rgba(2, 132, 199, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    /* Topbar */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #f8fdff;
+      backdrop-filter: saturate(1.2) blur(6px);
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 800; letter-spacing: .8px;
+    }
+    .logo {
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--cyan), #7de3f1);
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+    .logo:after { /* C estilizado */
+      content: ""; position: absolute; inset: 5px;
+      border: 3px solid white; border-right-color: transparent; border-radius: 10px;
+    }
+    .brand b { color: var(--cyan-700); font-size: 18px; }
+    .brand small { color: var(--muted); font-weight: 600; }
+
+    .spacer { flex: 1; }
+
+    .nav {
+      display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .tab {
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      padding: 8px 12px; border-radius: 999px;
+      font-weight: 600;
+      cursor: pointer; user-select: none;
+      transition: transform .08s ease, background .2s ease, color .2s ease, border-color .2s ease;
+    }
+    .tab:hover { transform: translateY(-1px); }
+    .tab.active { background: var(--cyan); color: white; border-color: var(--cyan); }
+    .out {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 8px 12px; border-radius: 12px; cursor: pointer; font-weight: 700;
+    }
+
+    /* Layout */
+    .wrap { max-width: 1120px; margin: 16px auto; padding: 0 16px 32px; }
+
+    .cards { display: grid; gap: 16px; grid-template-columns: repeat(12, 1fr); }
+    .card { grid-column: span 12; background: #ffffff; border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+    .card h3 { margin: 0; padding: 16px; border-bottom: 1px solid var(--line); font-size: 16px; }
+    .card .content { padding: 16px; }
+
+    @media (min-width: 720px) {
+      .card.sm-6 { grid-column: span 6; }
+      .card.sm-4 { grid-column: span 4; }
+      .card.sm-8 { grid-column: span 8; }
+    }
+
+    /* Forms */
+    form { display: grid; gap: 12px; }
+    .row { display: grid; gap: 12px; }
+    @media (min-width: 720px) { .row.cols-2 { grid-template-columns: 1fr 1fr; } }
+
+    label { font-weight: 700; color: var(--muted); font-size: 12px; }
+    input, select, textarea {
+      width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line);
+      outline: none; background: #fff;
+      font-weight: 600;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(0,188,212,.1); }
+    button {
+      border: 0; background: var(--cyan); color: white; padding: 10px 14px; border-radius: 12px; font-weight: 800; cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+    button.secondary { background: #ffffff; color: var(--cyan-700); border: 1px solid var(--cyan); }
+
+    .muted { color: var(--muted); }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { font-weight: 700; background: var(--chip); border-radius: 999px; padding: 6px 10px; border: 1px solid var(--line); }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); }
+    th { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+    tr:hover td { background: #f8fdff; }
+
+    .kpi { display: flex; align-items: center; gap: 12px; }
+    .kpi .dot { width: 12px; height: 12px; border-radius: 999px; background: var(--cyan); }
+    .kpi b { font-size: 20px; }
+
+    .progress { height: 12px; background: #e8f7fa; border-radius: 999px; overflow: hidden; border: 1px solid #d2eff5; }
+    .progress > i { display: block; height: 100%; background: linear-gradient(90deg, var(--cyan), #7de3f1); width: 0%; }
+
+    .pill { padding: 4px 10px; border-radius: 999px; font-weight: 800; font-size: 12px; border: 1px solid var(--line); }
+    .pill.ok { color: #065f46; background: #ecfdf5; border-color: #d1fae5; }
+    .pill.warn { color: #78350f; background: #fffbeb; border-color: #fde68a; }
+    .pill.bad { color: #7f1d1d; background: #fef2f2; border-color: #fecaca; }
+
+    .hide { display: none !important; }
+
+    /* Login screen */
+    .login {
+      max-width: 420px; margin: 56px auto; padding: 24px; border-radius: 16px; border: 1px solid var(--line); background: white; box-shadow: var(--shadow);
+    }
+    .login h1 { margin: 8px 0 0; font-size: 28px; }
+    .login p { margin: 4px 0 16px; color: var(--muted); font-weight: 600; }
+
+    .footer { text-align: center; color: var(--muted); font-size: 12px; margin: 24px 0; }
+
+    .right { text-align: right; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <div><b>CONTAX</b></div>
+        <small>ME & MEI • Dashboard</small>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <nav class="nav hide" id="navTabs">
+      <button class="tab active" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="empresas" id="tabEmpresas">Empresas</button>
+      <button class="tab" data-tab="notas" id="tabNotas">Notas Fiscais</button>
+    </nav>
+    <div class="spacer"></div>
+    <div id="who" class="muted"></div>
+    <button class="out hide" id="btnLogout">Sair</button>
+  </header>
+
+  <!-- LOGIN -->
+  <main class="wrap" id="screenLogin">
+    <div class="login">
+      <div class="brand" style="margin-bottom:8px">
+        <div class="logo"></div>
+        <div><b>CONTAX</b></div>
+      </div>
+      <h1>Bem-vindo(a)</h1>
+      <p>Escolha o tipo de acesso. Área de lançamento de notas é exclusiva do administrador.</p>
+      <form id="formLogin">
+        <label for="role">Entrar como</label>
+        <select id="role" required>
+          <option value="admin">Administrador</option>
+          <option value="empresa">Empresa</option>
+        </select>
+
+        <div id="loginAdmin">
+          <label for="adminPass">Senha do administrador</label>
+          <input id="adminPass" type="password" placeholder="Ex.: admin123" />
+        </div>
+
+        <div id="loginEmpresa" class="hide">
+          <label for="empresaSelect">Selecione sua empresa</label>
+          <select id="empresaSelect"></select>
+        </div>
+
+        <button type="submit">Entrar</button>
+        <button type="button" class="secondary" id="btnSeed">Popular com dados de exemplo</button>
+      </form>
+      <div class="footer">Cores: ciano & branco • © CONTAX</div>
+    </div>
+  </main>
+
+  <!-- APP -->
+  <main class="wrap hide" id="screenApp">
+
+    <!-- DASHBOARD -->
+    <section id="tab-dashboard" class="cards">
+      <article class="card sm-8">
+        <h3>Visão Geral — <span id="monthLabel"></span></h3>
+        <div class="content" id="dashboardResumo">
+          <div class="muted">Nenhum dado encontrado.</div>
+        </div>
+      </article>
+
+      <article class="card sm-4">
+        <h3>Filtro</h3>
+        <div class="content">
+          <form id="formFiltro">
+            <label for="mes">Mês</label>
+            <input type="month" id="mes" />
+
+            <div id="filtroEmpresaWrap">
+              <label for="filtroEmpresa">Empresa</label>
+              <select id="filtroEmpresa"></select>
+            </div>
+
+            <button type="submit">Aplicar</button>
+          </form>
+        </div>
+      </article>
+
+      <article class="card sm-12">
+        <h3>Notas Fiscais do período</h3>
+        <div class="content">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Empresa</th>
+                <th>Descrição</th>
+                <th class="right">Valor (R$)</th>
+              </tr>
+            </thead>
+            <tbody id="tNotasPeriodo"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- EMPRESAS (ADMIN) -->
+    <section id="tab-empresas" class="cards hide">
+      <article class="card sm-5">
+        <h3>Cadastrar Empresa</h3>
+        <div class="content">
+          <form id="formEmpresa">
+            <div class="row cols-2">
+              <div>
+                <label for="nomeEmp">Nome</label>
+                <input id="nomeEmp" required placeholder="Ex.: Acme LTDA" />
+              </div>
+              <div>
+                <label for="cnpjEmp">CNPJ (opcional)</label>
+                <input id="cnpjEmp" placeholder="00.000.000/0001-00" />
+              </div>
+            </div>
+            <div class="row cols-2">
+              <div>
+                <label for="tipoEmp">Tipo</label>
+                <select id="tipoEmp">
+                  <option value="MEI">MEI</option>
+                  <option value="ME">ME</option>
+                </select>
+              </div>
+              <div>
+                <label for="limiteMensal">Limite Mensal (R$)</label>
+                <input id="limiteMensal" type="number" min="0" step="0.01" placeholder="Ex.: 6750 para MEI" />
+              </div>
+            </div>
+            <button type="submit">Salvar Empresa</button>
+          </form>
+        </div>
+      </article>
+
+      <article class="card sm-7">
+        <h3>Empresas Cadastradas</h3>
+        <div class="content">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Limite Mensal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tEmpresas"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- NOTAS (ADMIN) -->
+    <section id="tab-notas" class="cards hide">
+      <article class="card sm-5">
+        <h3>Lançar Nota Fiscal (apenas Admin)</h3>
+        <div class="content">
+          <form id="formNota">
+            <label for="empresaNF">Empresa</label>
+            <select id="empresaNF"></select>
+
+            <div class="row cols-2">
+              <div>
+                <label for="dataNF">Data</label>
+                <input id="dataNF" type="date" />
+              </div>
+              <div>
+                <label for="valorNF">Valor (R$)</label>
+                <input id="valorNF" type="number" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <label for="descNF">Descrição</label>
+            <input id="descNF" placeholder="Serviço, venda, etc." />
+
+            <button type="submit">Lançar Nota</button>
+          </form>
+        </div>
+      </article>
+
+      <article class="card sm-7">
+        <h3>Notas Fiscais (todas)</h3>
+        <div class="content">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Empresa</th>
+                <th>Descrição</th>
+                <th class="right">Valor (R$)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tNotas"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <script>
+    /********************
+     * CONTAX — Storage *
+     ********************/
+    const LS = {
+      companiesKey: 'contax_companies',
+      invoicesKey: 'contax_invoices',
+      adminPassKey: 'contax_admin_pass',
+      getCompanies() { return JSON.parse(localStorage.getItem(this.companiesKey) || '[]'); },
+      setCompanies(list) { localStorage.setItem(this.companiesKey, JSON.stringify(list)); },
+      getInvoices() { return JSON.parse(localStorage.getItem(this.invoicesKey) || '[]'); },
+      setInvoices(list) { localStorage.setItem(this.invoicesKey, JSON.stringify(list)); },
+      getAdminPass() { return localStorage.getItem(this.adminPassKey) || 'admin123'; },
+      setAdminPass(v) { localStorage.setItem(this.adminPassKey, v); },
+      resetAll() { localStorage.removeItem(this.companiesKey); localStorage.removeItem(this.invoicesKey); }
+    };
+
+    /********************
+     * Utils            *
+     ********************/
+    const fmt = {
+      money(v) { return Number(v || 0).toLocaleString('pt-BR', { style:'currency', currency:'BRL' }); },
+      dateISO(d=new Date()) {
+        const pad = n => String(n).padStart(2,'0');
+        return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+      },
+      ym(d) {
+        if (typeof d === 'string') d = new Date(d);
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+      },
+      byMonth(list, yymm) { return list.filter(n => fmt.ym(n.date) === yymm); },
+    };
+
+    const state = {
+      user: null, // { role: 'admin' } | { role:'empresa', empresaId }
+      filterYM: fmt.ym(new Date()),
+      filterEmpresa: 'all',
+    };
+
+    /********************
+     * Boot & Login     *
+     ********************/
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+    function showLogin() {
+      $('#screenLogin').classList.remove('hide');
+      $('#screenApp').classList.add('hide');
+      $('#navTabs').classList.add('hide');
+      $('#btnLogout').classList.add('hide');
+      $('#who').textContent = '';
+      // populate empresaSelect
+      const companies = LS.getCompanies();
+      const sel = $('#empresaSelect');
+      sel.innerHTML = companies.map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
+      if (!companies.length) sel.innerHTML = '<option value="">Nenhuma empresa cadastrada</option>';
+    }
+
+    function showApp() {
+      $('#screenLogin').classList.add('hide');
+      $('#screenApp').classList.remove('hide');
+      $('#navTabs').classList.remove('hide');
+      $('#btnLogout').classList.remove('hide');
+      const name = state.user.role === 'admin' ? 'Administrador' : getCompany(state.user.empresaId)?.nome;
+      $('#who').textContent = name ? `Acesso: ${name}` : '';
+      // Role gating
+      $('#tabEmpresas').classList.toggle('hide', state.user.role !== 'admin');
+      $('#tabNotas').classList.toggle('hide', state.user.role !== 'admin');
+      // Also hide nav buttons accordingly
+      $$('button.tab').forEach(b=>b.classList.remove('active'));
+      $('[data-tab="dashboard"]').classList.add('active');
+      // Only show tabs user can access
+      $('[data-tab="empresas"]').classList.toggle('hide', state.user.role !== 'admin');
+      $('[data-tab="notas"]').classList.toggle('hide', state.user.role !== 'admin');
+
+      // Filtro empresa: admin pode "todas"; empresa vê apenas a sua
+      const filtroEmp = $('#filtroEmpresa');
+      const companies = LS.getCompanies();
+      if (state.user.role === 'admin') {
+        filtroEmp.innerHTML = '<option value="all">Todas</option>' + companies.map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
+        $('#filtroEmpresaWrap').style.display = '';
+      } else {
+        filtroEmp.innerHTML = companies.filter(c=>c.id===state.user.empresaId).map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
+        $('#filtroEmpresaWrap').style.display = 'none';
+        state.filterEmpresa = state.user.empresaId;
+      }
+      // Month input
+      $('#mes').value = state.filterYM;
+      $('#monthLabel').textContent = new Date(state.filterYM+'-01').toLocaleDateString('pt-BR', {month:'long', year:'numeric'});
+
+      refreshEmpresas();
+      refreshNotas();
+      refreshDashboard();
+    }
+
+    function getCompany(id){ return LS.getCompanies().find(c=>c.id===id); }
+
+    // Login form logic
+    $('#role').addEventListener('change', e => {
+      const role = e.target.value;
+      $('#loginAdmin').classList.toggle('hide', role !== 'admin');
+      $('#loginEmpresa').classList.toggle('hide', role !== 'empresa');
+    });
+
+    $('#formLogin').addEventListener('submit', e => {
+      e.preventDefault();
+      const role = $('#role').value;
+      if (role === 'admin') {
+        const pass = $('#adminPass').value || '';
+        if (pass !== LS.getAdminPass()) { alert('Senha de administrador incorreta.'); return; }
+        state.user = { role: 'admin' };
+      } else {
+        const id = $('#empresaSelect').value;
+        if (!id) { alert('Nenhuma empresa disponível. Contate o administrador.'); return; }
+        state.user = { role: 'empresa', empresaId: id };
+      }
+      showApp();
+    });
+
+    $('#btnLogout').addEventListener('click', () => { state.user = null; showLogin(); });
+
+    // Seed demo data
+    $('#btnSeed').addEventListener('click', () => {
+      if (!confirm('Popular com dados de exemplo? Isso substituirá os dados atuais.')) return;
+      LS.resetAll();
+      const companies = [
+        { id: crypto.randomUUID(), nome: 'Bluewave MEI', cnpj: '12.345.678/0001-00', tipo:'MEI', limite: 6750 },
+        { id: crypto.randomUUID(), nome: 'Alfa Tech ME', cnpj: '98.765.432/0001-00', tipo:'ME', limite: 20000 }
+      ];
+      LS.setCompanies(companies);
+      const today = new Date();
+      const ym = fmt.ym(today);
+      const prev = new Date(today.getFullYear(), today.getMonth()-1, 15);
+      const invoices = [
+        { id: crypto.randomUUID(), empresaId: companies[0].id, date: ym+'-05', desc: 'Serviços web', valor: 2200 },
+        { id: crypto.randomUUID(), empresaId: companies[0].id, date: ym+'-12', desc: 'Venda de produto', valor: 900 },
+        { id: crypto.randomUUID(), empresaId: companies[1].id, date: ym+'-08', desc: 'Consultoria', valor: 3500 },
+        { id: crypto.randomUUID(), empresaId: companies[1].id, date: fmt.dateISO(prev), desc: 'Treinamento (mês anterior)', valor: 4800 },
+      ];
+      LS.setInvoices(invoices);
+      alert('Pronto! Dados de exemplo carregados.');
+      showLogin();
+    });
+
+    /********************
+     * Empresas (Admin) *
+     ********************/
+    function refreshEmpresas(){
+      const list = LS.getCompanies();
+      // tabela
+      const tbody = $('#tEmpresas');
+      if (!list.length) { tbody.innerHTML = '<tr><td colspan="4" class="muted">Nenhuma empresa cadastrada.</td></tr>'; }
+      else {
+        tbody.innerHTML = list.map(c => `
+          <tr>
+            <td>
+              <div style="font-weight:800">${c.nome}</div>
+              <div class="muted" style="font-size:12px">${c.cnpj || ''}</div>
+            </td>
+            <td><span class="pill ${c.tipo==='MEI'?'ok':'warn'}">${c.tipo}</span></td>
+            <td>${fmt.money(c.limite)}</td>
+            <td class="right">
+              <button class="secondary" onclick="editEmpresa('${c.id}')">Editar</button>
+              <button onclick="deleteEmpresa('${c.id}')">Excluir</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+      // selects dependentes
+      const selNF = $('#empresaNF');
+      selNF.innerHTML = list.map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
+      const selLogin = $('#empresaSelect');
+      selLogin.innerHTML = list.map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
+    }
+
+    function editEmpresa(id){
+      const c = getCompany(id); if (!c) return;
+      $('#nomeEmp').value = c.nome;
+      $('#cnpjEmp').value = c.cnpj || '';
+      $('#tipoEmp').value = c.tipo;
+      $('#limiteMensal').value = c.limite;
+      $('#formEmpresa').dataset.editing = id;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function deleteEmpresa(id){
+      if (!confirm('Excluir esta empresa? As notas associadas serão mantidas.')) return;
+      const list = LS.getCompanies().filter(c=>c.id!==id);
+      LS.setCompanies(list);
+      refreshEmpresas();
+      refreshDashboard();
+      refreshNotas();
+    }
+
+    $('#formEmpresa').addEventListener('submit', e => {
+      e.preventDefault();
+      const nome = $('#nomeEmp').value.trim();
+      const cnpj = $('#cnpjEmp').value.trim();
+      const tipo = $('#tipoEmp').value;
+      const limite = Number($('#limiteMensal').value || 0);
+      if (!nome) return alert('Informe o nome.');
+      if (!limite) return alert('Informe o limite mensal.');
+      const list = LS.getCompanies();
+      const editing = e.target.dataset.editing;
+      if (editing) {
+        const idx = list.findIndex(c=>c.id===editing);
+        list[idx] = { ...list[idx], nome, cnpj, tipo, limite };
+        delete e.target.dataset.editing;
+      } else {
+        list.push({ id: crypto.randomUUID(), nome, cnpj, tipo, limite });
+      }
+      LS.setCompanies(list);
+      e.target.reset();
+      refreshEmpresas();
+      refreshDashboard();
+      refreshNotas();
+      alert('Empresa salva com sucesso.');
+    });
+
+    /********************
+     * Notas (Admin)    *
+     ********************/
+    function refreshNotas(){
+      const inv = LS.getInvoices();
+      const companies = LS.getCompanies();
+      const tbody = $('#tNotas');
+      if (!inv.length) tbody.innerHTML = '<tr><td colspan="5" class="muted">Nenhuma nota lançada.</td></tr>';
+      else tbody.innerHTML = inv.sort((a,b)=>a.date>b.date? -1:1).map(n=>{
+        const comp = companies.find(c=>c.id===n.empresaId);
+        return `
+        <tr>
+          <td>${new Date(n.date).toLocaleDateString('pt-BR')}</td>
+          <td>${comp?comp.nome:'—'}</td>
+          <td>${n.desc || ''}</td>
+          <td class="right">${fmt.money(n.valor)}</td>
+          <td class="right"><button onclick="deleteNota('${n.id}')">Excluir</button></td>
+        </tr>`;
+      }).join('');
+
+      // Notas do período (dashboard table)
+      const ym = state.filterYM;
+      const selected = inv.filter(n => fmt.ym(n.date) === ym && (state.filterEmpresa==='all' || n.empresaId===state.filterEmpresa));
+      const tPer = $('#tNotasPeriodo');
+      if (!selected.length) tPer.innerHTML = '<tr><td colspan="4" class="muted">Sem notas neste período.</td></tr>';
+      else tPer.innerHTML = selected.sort((a,b)=>a.date>b.date? -1:1).map(n=>{
+        const comp = companies.find(c=>c.id===n.empresaId);
+        return `
+          <tr>
+            <td>${new Date(n.date).toLocaleDateString('pt-BR')}</td>
+            <td>${comp?comp.nome:'—'}</td>
+            <td>${n.desc || ''}</td>
+            <td class="right">${fmt.money(n.valor)}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function deleteNota(id){
+      if (!confirm('Excluir esta nota fiscal?')) return;
+      const list = LS.getInvoices().filter(n=>n.id!==id);
+      LS.setInvoices(list);
+      refreshNotas();
+      refreshDashboard();
+    }
+
+    $('#formNota').addEventListener('submit', e => {
+      e.preventDefault();
+      const empresaId = $('#empresaNF').value;
+      const date = $('#dataNF').value || fmt.dateISO(new Date());
+      const valor = Number($('#valorNF').value || 0);
+      const desc = $('#descNF').value.trim();
+      if (!empresaId) return alert('Selecione uma empresa.');
+      if (!valor) return alert('Informe um valor válido.');
+      const list = LS.getInvoices();
+      list.push({ id: crypto.randomUUID(), empresaId, date, valor, desc });
+      LS.setInvoices(list);
+      e.target.reset();
+      refreshNotas();
+      refreshDashboard();
+      alert('Nota lançada com sucesso.');
+    });
+
+    /********************
+     * Dashboard        *
+     ********************/
+    function computeResumo(ym, empresaId='all'){
+      const companies = LS.getCompanies();
+      const inv = LS.getInvoices();
+      const scope = empresaId==='all' ? companies.map(c=>c.id) : [empresaId];
+      const rows = scope.map(id => {
+        const comp = companies.find(c=>c.id===id);
+        const notas = inv.filter(n => n.empresaId===id && fmt.ym(n.date)===ym);
+        const gasto = notas.reduce((s,n)=>s+Number(n.valor||0),0);
+        const limite = Number(comp?.limite || 0);
+        const restante = limite - gasto;
+        const pct = limite>0 ? Math.min(100, Math.max(0, (gasto/limite)*100)) : 0;
+        let status = 'ok';
+        if (pct >= 85 && pct < 100) status = 'warn';
+        if (pct >= 100) status = 'bad';
+        return { id, nome: comp?.nome || '—', tipo: comp?.tipo || '—', limite, gasto, restante, pct, notas };
+      });
+      return rows;
+    }
+
+    function renderResumo(){
+      const ym = state.filterYM;
+      const empresaId = state.filterEmpresa;
+      const rows = computeResumo(ym, empresaId);
+      const el = $('#dashboardResumo');
+      if (!rows.length) { el.innerHTML = '<div class="muted">Cadastre empresas para visualizar o resumo.</div>'; return; }
+      el.innerHTML = rows.map(r=>`
+        <div class="card" style="margin-bottom:12px">
+          <div class="content">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap">
+              <div>
+                <div class="chips" style="margin-bottom:8px">
+                  <span class="chip">${r.tipo}</span>
+                  <span class="chip">${new Date(ym+'-01').toLocaleDateString('pt-BR', {month:'long', year:'numeric'})}</span>
+                </div>
+                <div class="kpi"><span class="dot"></span><b>${r.nome}</b></div>
+                <div class="muted">Limite: <b>${fmt.money(r.limite)}</b> • Utilizado: <b>${fmt.money(r.gasto)}</b> • Restante: <b>${fmt.money(r.restante)}</b></div>
+              </div>
+              <div style="min-width:220px; flex:1">
+                <div class="progress" aria-label="Progresso de consumo"><i style="width:${r.pct.toFixed(1)}%"></i></div>
+                <div style="display:flex; justify-content:space-between; margin-top:6px; font-weight:700">
+                  <span>${r.pct.toFixed(1)}%</span>
+                  <span class="pill ${r.pct>=100?'bad':(r.pct>=85?'warn':'ok')}">${r.pct>=100?'Estourou':(r.pct>=85?'Quase no limite':'Saudável')}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function refreshDashboard(){
+      $('#monthLabel').textContent = new Date(state.filterYM+'-01').toLocaleDateString('pt-BR', {month:'long', year:'numeric'});
+      renderResumo();
+      refreshNotas(); // atualiza tabela do período
+    }
+
+    // Filtro
+    $('#formFiltro').addEventListener('submit', e => {
+      e.preventDefault();
+      const ym = $('#mes').value || fmt.ym(new Date());
+      state.filterYM = ym;
+      state.filterEmpresa = state.user.role==='admin' ? ($('#filtroEmpresa').value || 'all') : state.user.empresaId;
+      refreshDashboard();
+    });
+
+    /********************
+     * Tabs/Nav         *
+     ********************/
+    $$('#navTabs .tab').forEach(btn => btn.addEventListener('click', () => {
+      $$('#navTabs .tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const id = btn.dataset.tab;
+      ['dashboard','empresas','notas'].forEach(t => $('#tab-'+t).classList.toggle('hide', t!==id));
+    }));
+
+    // Init
+    (function init(){
+      // default month
+      $('#mes').value = state.filterYM;
+      showLogin();
+      // default dates
+      $('#dataNF').value = fmt.dateISO(new Date());
+    })();
+  </script>
+</body>
+</html>
+
