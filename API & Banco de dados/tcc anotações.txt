@@ -1,0 +1,19 @@
+pesquisar transformar pdf em xml;
+documentos: não vai ter versão manual;
+criar visualizador de pdf;
+- tela pra adm alterar regime empresa;
+- proposta: solução da problematização;
+- prints: 23/10;
+- tcc simulação 26/11
+- tcc feira: 02/12;
+
+banco de dados:
+- tirar doc_data_upload;
+- revisar tabela documentos;
+- cadastro;
+- rever regime_tipo_empresa_permitida;
+- rever emp_tipo (e tirar);
+- empresas: colocar município separado;
+- emp_telefone ter vários;
+- colocar vários emails empresas;
+- suporte: contabilidade com os TI;
