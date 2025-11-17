@@ -8,7 +8,6 @@ criar visualizador de pdf;
 - tcc feira: 02/12;
 
 banco de dados:
-- tirar doc_data_upload;
 - revisar tabela documentos;
 - cadastro;
 - rever regime_tipo_empresa_permitida;
