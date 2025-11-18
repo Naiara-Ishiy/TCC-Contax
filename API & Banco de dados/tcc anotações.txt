@@ -10,3 +10,4 @@ criar visualizador de pdf;
 banco de dados:
 - cadastro;
 - suporte: contabilidade com os TI;
+- ALTERAR DIAGRAMA P USUARIO_EMPRESAS
