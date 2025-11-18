@@ -8,11 +8,5 @@ criar visualizador de pdf;
 - tcc feira: 02/12;
 
 banco de dados:
-- revisar tabela documentos;
 - cadastro;
-- rever regime_tipo_empresa_permitida;
-- rever emp_tipo (e tirar);
-- empresas: colocar município separado;
-- emp_telefone ter vários;
-- colocar vários emails empresas;
 - suporte: contabilidade com os TI;
