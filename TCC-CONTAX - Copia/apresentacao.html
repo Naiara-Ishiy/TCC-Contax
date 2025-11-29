@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CONTAX — Apresentação (Claro)</title>
+  <meta name="description" content="CONTAX — Gestão de Notas para ME e MEI. Versão clara da página de apresentação." />
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#0f172a;
+      --panel:#f8fafc;
+      --cyan:#00bcd4;
+      --cyan-700:#008fa3;
+      --muted:#64748b;
+      --glass: rgba(0,0,0,0.04);
+      --glass-2: rgba(0,0,0,0.02);
+      --accent-glow: 0 6px 24px rgba(0,188,212,0.18);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; background: var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased}
+    a{color:inherit}
+    .container{max-width:1200px;margin:36px auto;padding:28px}
+
+    /* HERO */
+    .hero{display:grid;grid-template-columns:1fr 460px;gap:32px;align-items:center;margin-bottom:28px}
+    @media (max-width:980px){ .hero{grid-template-columns:1fr} }
+
+    .brand{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+    .logo{width:72px;height:72px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),#7de3f1);display:grid;place-items:center;box-shadow:var(--accent-glow)}
+    .logo svg{width:46px;height:46px}
+    .brand h1{margin:0;font-size:22px;letter-spacing:0.6px}
+    .brand p{margin:0;color:var(--muted);font-weight:600;font-size:13px}
+
+    .headline{font-size:36px;line-height:1.05;margin:6px 0 10px}
+    @media (max-width:520px){ .headline{font-size:26px} }
+
+    .sub{color:var(--muted);font-size:15px;margin-bottom:18px}
+    .ctas{display:flex;gap:12px;flex-wrap:wrap}
+
+    .btn{background:linear-gradient(90deg,var(--cyan),var(--cyan-700));color:white;padding:12px 18px;border-radius:12px;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;gap:10px;box-shadow:var(--accent-glow)}
+    .btn.ghost{background:white;border:1px solid #e2e8f0;color:var(--ink);padding:11px 16px;font-weight:700;box-shadow:none}
+
+    /* Preview */
+    .preview{border-radius:var(--radius);overflow:hidden;background:white;border:1px solid #e2e8f0;box-shadow:0 20px 60px rgba(15,23,42,0.12);padding:18px}
+    .chip{background:#f1f5f9;padding:8px 10px;border-radius:12px;font-weight:700;color:var(--muted);font-size:13px;border:1px solid rgba(0,0,0,0.04)}
+
+    /* Features */
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:28px 0}
+    @media (max-width:980px){ .features{grid-template-columns:1fr} }
+    .card{background:var(--panel);border-radius:14px;padding:20px;border:1px solid #e2e8f0;box-shadow:0 12px 36px rgba(15,23,42,0.08);transition:transform .28s ease}
+    .card:hover{transform:translateY(-6px)}
+    .card h3{margin:0 0 8px;font-size:16px}
+    .card p{margin:0;color:var(--muted);font-weight:600;font-size:14px}
+
+    .icon-wrap{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,rgba(0,188,212,0.15),rgba(0,188,212,0.05));display:grid;place-items:center;margin-bottom:12px;border:1px solid rgba(0,0,0,0.04)}
+
+    /* Steps */
+    .steps{display:flex;gap:18px}@media(max-width:720px){.steps{flex-direction:column}}
+    .step{flex:1;border-radius:12px;padding:14px;border:1px solid #e2e8f0;background:white}
+    .step small{color:var(--muted);font-size:13px}
+
+    /* Footer */
+    footer{margin-top:34px;color:var(--muted);font-size:13px;padding:28px 0;text-align:center;border-top:1px dashed #e2e8f0}
+    footer a{font-weight:700;color:var(--cyan-700);text-decoration:none}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="brand" style="justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="logo" style="background:transparent;box-shadow:none;padding:0;">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7ad9d3" /><stop offset="100%" stop-color="#25bdb3" /></linearGradient><radialGradient id="shine" cx="32%" cy="38%" r="35%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.45"/><stop offset="70%" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs><circle cx="100" cy="100" r="70" fill="none" stroke="url(#g)" stroke-width="52" stroke-linecap="round" stroke-dasharray="340 99" transform="rotate(-20 100 100)"/><circle cx="72" cy="82" r="42" fill="url(#shine)"/></svg>
+        </div>
+        <div>
+          <h1>CONTAX <span style="color:var(--muted);font-weight:700;font-size:13px">ME & MEI</span></h1>
+          <div style="font-size:12px;margin-top:4px;color:var(--muted)">Gestão de Notas • Controle de DAS • Painel intuitivo</div>
+        </div>
+      </div>
+
+      <nav style="display:flex;gap:10px;align-items:center">
+        <a class="btn ghost" href="#beneficios">Benefícios</a>
+        <a class="btn ghost" href="#como">Como funciona</a>
+        <a class="btn" href="index.html">Acessar o Sistema</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="pill" style="width:max-content;background:#f1f5f9;border-radius:999px;padding:6px 10px;font-weight:800;color:var(--muted)">Para ME & MEI</div>
+        <h2 class="headline">Controle financeiro e fiscal — claro, simples e direto.</h2>
+        <p class="sub">Organize notas fiscais, acompanhe limites mensais, gere histórico de DAS e visualize tudo em uma interface leve.</p>
+
+        <div class="ctas">
+          <a class="btn" href="index.html">Acessar o Sistema →</a>
+          <a class="btn ghost" href="#features">Ver funcionalidades</a>
+        </div>
+
+        <div style="margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <div class="muted" style="font-size:13px">Rápido • Fácil • Responsivo</div>
+          <div style="display:flex;gap:8px">
+            <span class="chip">Dashboard leve</span>
+            <span class="chip">Controle de DAS</span>
+          </div>
+        </div>
+
+        <div class="steps" style="margin-top:18px">
+          <div class="step"><small>Passo 1</small><h4>Cadastre sua empresa</h4><small>Informe CNPJ e tipo ME/MEI.</small></div>
+          <div class="step"><small>Passo 2</small><h4>Lance suas notas</h4><small>Registre data, descrição e valor.</small></div>
+          <div class="step"><small>Passo 3</small><h4>Acompanhe tudo</h4><small>Painel limpo, dados sempre atualizados.</small></div>
+        </div>
+      </div>
+
+      <aside class="preview">
+        <div class="top" style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <span class="chip">Preview</span>
+          <div style="flex:1"></div>
+          <div class="muted" style="font-size:13px">Exemplo</div>
+        </div>
+        <div style="background:#f1f5f9;border-radius:12px;padding:12px;border:1px solid #e2e8f0">
+          <svg viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg" style="width:100%">
+            <rect x="0" y="0" width="560" height="320" rx="10" fill="#e2e8f0" />
+            <rect x="18" y="14" width="220" height="18" rx="6" fill="#cbd5e1" />
+            <rect x="248" y="14" width="280" height="18" rx="6" fill="#cbd5e1" />
+            <rect x="18" y="44" width="150" height="72" rx="8" fill="#f1f5f9" />
+            <rect x="178" y="44" width="150" height="72" rx="8" fill="#f1f5f9" />
+            <rect x="338" y="44" width="180" height="72" rx="8" fill="#f1f5f9" />
+            <rect x="18" y="128" width="520" height="170" rx="8" fill="#fff" />
+          </svg>
+        </div>
+      </aside>
+    </section>
+
+    <section id="features">
+      <h2 style="margin:0 0 12px;font-size:20px">O que o CONTAX faz</h2>
+      <div class="features">
+        <div class="card">
+          <div class="icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M7 7h10M7 11h6" stroke="var(--cyan)" stroke-width="1.6" stroke-linecap="round"/><rect x="3" y="3" width="18" height="18" rx="3" stroke="#cbd5e1" stroke-width="1.2"/></svg>
+          </div>
+          <h3>Gestão de Notas</h3>
+          <p>Cadastre notas por data, descrição e valor. Filtre por mês e empresa.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M4 20h16M6 8h12v8H6z" stroke="var(--cyan)" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Controle de DAS</h3>
+          <p>Acompanhe pagamentos, vencimentos e histórico anual.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon-wrap">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M3 13h8M13 7h8M13 19h8" stroke="var(--cyan)" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Painel Intuitivo</h3>
+          <p>Resumo financeiro por período, total por empresa e tabelas organizadas.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      • © CONTAX — Versão clara da apresentação •<br>
+      <div style="margin-top:8px">Já tem a versão beta? <a href="index.html">Entrar no sistema</a></div>
+    </footer>
+
+  </div>
+</body>
+</html>
