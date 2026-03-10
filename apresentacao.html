@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CONTAX — Apresentação</title>
+  <meta name="description" content="CONTAX — Gestão de Notas para ME e MEI. Controle de notas, DAS, e relatórios em um só lugar." />
+  <style>
+    :root{
+      --bg:#06070a;
+      --panel:#0f1720;
+      --cyan:#00bcd4;
+      --cyan-700:#00a6bb;
+      --muted:#9aa6b2;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.02);
+      --accent-glow: 0 8px 32px rgba(0,188,212,0.12);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; background: radial-gradient(1200px 600px at 10% 20%, rgba(0,188,212,0.03), transparent), radial-gradient(900px 400px at 95% 80%, rgba(0,188,212,0.02), transparent), var(--bg); color:#e6eef6;-webkit-font-smoothing:antialiased}
+    a{color:inherit}
+    .container{max-width:1200px;margin:36px auto;padding:28px}
+    /* Top hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1fr 460px;
+      gap:32px;
+      align-items:center;
+      margin-bottom:28px;
+    }
+    @media (max-width:980px){ .hero{grid-template-columns:1fr; padding:0 16px} .container{padding:0} }
+    .brand {
+      display:flex;align-items:center;gap:14px;margin-bottom:18px;
+    }
+    .logo {
+      width:72px;height:72px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),#7de3f1);display:grid;place-items:center;box-shadow:var(--accent-glow);
+      flex-shrink:0;
+    }
+    .logo svg{width:46px;height:46px;display:block}
+    .brand h1{margin:0;font-size:22px;letter-spacing:0.6px}
+    .brand p{margin:0;color:var(--muted);font-weight:600;font-size:13px}
+    .headline{font-size:36px;line-height:1.02;margin:6px 0 10px}
+    @media (max-width:520px){ .headline{font-size:26px} }
+    .sub{color:var(--muted);font-size:15px;margin-bottom:18px}
+    .ctas{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:12px;font-weight:800;border:0;cursor:pointer;
+      background:linear-gradient(90deg,var(--cyan),var(--cyan-700));color:#021019;box-shadow:var(--accent-glow);
+      text-decoration:none;
+    }
+    .btn.ghost{
+      background:transparent;border:1px solid rgba(255,255,255,0.06);color:#e6eef6;padding:11px 16px;font-weight:700;
+      box-shadow:none;
+    }
+
+    /* Right pane preview card */
+    .preview {
+      border-radius:var(--radius);overflow:hidden;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);
+      box-shadow: 0 20px 60px rgba(2,6,23,0.6);
+      padding:18px;
+      transform: translateZ(0);
+    }
+    .preview .top {
+      display:flex;align-items:center;gap:10px;margin-bottom:12px;
+    }
+    .chip {background:var(--glass);padding:8px 10px;border-radius:12px;font-weight:700;color:var(--muted);font-size:13px;border:1px solid rgba(255,255,255,0.02)}
+    .mock {
+      background: linear-gradient(180deg, rgba(1,6,9,0.6), rgba(1,6,9,0.35));
+      border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.03);
+    }
+    .mock svg{width:100%;display:block;border-radius:10px}
+
+    /* features */
+    .features{display:grid;grid-template-columns: repeat(3,1fr);gap:18px;margin:28px 0}
+    @media (max-width:980px){ .features{grid-template-columns:1fr} }
+    .card{
+      background:linear-gradient(180deg,var(--panel), rgba(255,255,255,0.01));
+      border-radius:14px;padding:20px;border:1px solid var(--glass-2);box-shadow: 0 12px 36px rgba(2,6,23,0.5);
+      transition:transform .28s ease, box-shadow .28s ease;
+    }
+    .card:hover{transform:translateY(-8px);box-shadow: 0 22px 60px rgba(0,188,212,0.06)}
+    .card h3{margin:0 0 8px;font-size:16px}
+    .card p{margin:0;color:var(--muted);font-weight:600;font-size:14px}
+
+    .icon-wrap{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg, rgba(0,188,212,0.12), rgba(0,188,212,0.05));display:grid;place-items:center;margin-bottom:12px;border:1px solid rgba(255,255,255,0.02)}
+
+    /* steps */
+    .steps{display:flex;gap:18px;align-items:stretch;margin-top:18px}
+    @media (max-width:720px){ .steps{flex-direction:column} }
+    .step{flex:1;background:transparent;border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.02)}
+    .step h4{margin:6px 0 4px;font-size:14px}
+    .step small{display:block;color:var(--muted);font-size:13px}
+
+    /* footer */
+    footer{margin-top:34px;color:var(--muted);font-size:13px;padding:28px 0;text-align:center;border-top:1px dashed rgba(255,255,255,0.02)}
+    footer a{color:var(--muted);text-decoration:none;font-weight:700}
+
+    /* subtle animated background shapes */
+    .bg-orb {
+      position:fixed;right:-120px;top:-80px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(0,188,212,0.12), rgba(0,188,212,0.04) 40%, transparent 60%);filter:blur(40px);pointer-events:none;z-index:0;animation:float 12s linear infinite;
+    }
+    .bg-orb.left { left:-140px; top:60%; right:auto; background:radial-gradient(circle at 70% 70%, rgba(0,188,212,0.08), rgba(0,188,212,0.02) 40%, transparent 60%); animation-duration:18s; }
+    @keyframes float{ 0%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(18px) rotate(12deg)} 100%{transform:translateY(0) rotate(0deg)} }
+
+    /* small utilities */
+    .muted{color:var(--muted)}
+    .center{display:flex;align-items:center;justify-content:center}
+    .pill{display:inline-block;padding:6px 10px;background:rgba(255,255,255,0.02);border-radius:999px;border:1px solid rgba(255,255,255,0.02);font-weight:800;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="bg-orb" aria-hidden="true"></div>
+  <div class="bg-orb left" aria-hidden="true"></div>
+
+  <div class="container" role="main">
+    <header class="brand" style="justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="logo" aria-hidden="true">
+          <!-- simple C logo -->
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo CONTAX">
+            <defs>
+              <linearGradient id="gA" x1="0" x2="1">
+                <stop offset="0" stop-color="#00bcd4"/>
+                <stop offset="1" stop-color="#00a6bb"/>
+              </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="36" stroke="url(#gA)" stroke-width="12" stroke-linecap="round" stroke-dasharray="220 50" transform="rotate(-18 50 50)"/>
+          </svg>
+        </div>
+        <div>
+          <h1 style="margin:0;font-size:16px;color:#e6eef6">CONTAX <span style="color:var(--muted);font-weight:700;font-size:13px">ME & MEI</span></h1>
+          <div class="muted" style="font-size:12px;margin-top:4px">Gestão de Notas • Controle de DAS • Painel intuitivo</div>
+        </div>
+      </div>
+
+      <nav style="display:flex;gap:10px;align-items:center">
+        <a class="pill" href="#beneficios">Benefícios</a>
+        <a class="pill" href="#como">Como funciona</a>
+        <a class="btn ghost" href="index.html" style="font-weight:800">Acessar o Sistema</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="pill" style="width:max-content">Para ME & MEI</div>
+          <h2 id="hero-title" class="headline">CONTROLE financeiro e fiscal — sem complicação.</h2>
+          <p class="sub">Organize notas fiscais, acompanhe limites mensais, gere histórico de DAS e tenha um painel claro para controlar o que importa no seu negócio.</p>
+
+          <div class="ctas" style="margin-top:6px">
+            <a class="btn" href="index.html" aria-label="Acessar o sistema">Acessar o Sistema →</a>
+            <a class="btn ghost" href="#features" aria-label="Ver funcionalidades">Ver funcionalidades</a>
+          </div>
+
+          <div style="margin-top:18px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+            <div class="muted" style="font-size:13px">Confiável • Fácil • Local</div>
+            <div style="width:8px"></div>
+            <div style="display:flex;gap:8px">
+              <span class="chip">Dashboard inteligente</span>
+              <span class="chip">Controle de DAS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- steps -->
+        <div class="steps" style="margin-top:18px">
+          <div class="step">
+            <small class="muted">Passo 1</small>
+            <h4>Cadastre sua empresa</h4>
+            <small class="muted">Insira CNPJ, tipo (ME/MEI) e limite mensal.</small>
+          </div>
+          <div class="step">
+            <small class="muted">Passo 2</small>
+            <h4>Lance suas notas</h4>
+            <small class="muted">Registre data, descrição e valor — fácil e rápido.</small>
+          </div>
+          <div class="step">
+            <small class="muted">Passo 3</small>
+            <h4>Acompanhe o painel</h4>
+            <small class="muted">Resumo por mês, total por empresa e gerenciamento de DAS.</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- right preview -->
+      <aside class="preview" aria-hidden="true">
+        <div class="top">
+          <div class="chip">Preview</div>
+          <div style="flex:1"></div>
+          <div class="muted" style="font-size:13px">Últimos lançamentos</div>
+        </div>
+        <div class="mock">
+          <!-- simple mock dashboard SVG (illustrative) -->
+          <svg viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mockup dashboard">
+            <defs>
+              <linearGradient id="g2" x1="0" x2="1">
+                <stop offset="0" stop-color="#052028"/><stop offset="1" stop-color="#08171b"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="560" height="320" rx="10" fill="url(#g2)"/>
+            <!-- header -->
+            <rect x="18" y="14" width="220" height="18" rx="6" fill="#081a20" />
+            <rect x="248" y="14" width="280" height="18" rx="6" fill="#081a20" />
+            <!-- tiles -->
+            <rect x="18" y="44" width="150" height="72" rx="8" fill="#07111a" />
+            <rect x="178" y="44" width="150" height="72" rx="8" fill="#07111a" />
+            <rect x="338" y="44" width="180" height="72" rx="8" fill="#07111a" />
+            <!-- bars -->
+            <g transform="translate(22,54)">
+              <rect x="12" y="28" width="12" height="18" rx="3" fill="#09323a"/>
+              <rect x="36" y="20" width="12" height="26" rx="3" fill="#09474c"/>
+              <rect x="60" y="10" width="12" height="36" rx="3" fill="#00bcd4"/>
+              <rect x="84" y="24" width="12" height="22" rx="3" fill="#0daaa8"/>
+            </g>
+            <!-- table -->
+            <rect x="18" y="128" width="520" height="170" rx="8" fill="#061016"/>
+            <g fill="#0daaa8" font-size="12" font-weight="700">
+              <text x="34" y="150">01/10/2025</text>
+              <text x="138" y="150">Acme LTDA</text>
+              <text x="340" y="150">Serviços</text>
+              <text x="480" y="150" text-anchor="end">R$ 3.200,00</text>
+
+              <text x="34" y="176" fill="#90e8e4" font-weight="600">08/10/2025</text>
+              <text x="138" y="176" fill="#90e8e4">Padaria Sol</text>
+              <text x="340" y="176" fill="#90e8e4">Fornecimento</text>
+              <text x="480" y="176" text-anchor="end" fill="#90e8e4">R$ 420,50</text>
+            </g>
+          </svg>
+        </div>
+      </aside>
+    </section>
+
+    <!-- features -->
+    <section id="features" aria-labelledby="features-title">
+      <h2 id="features-title" style="margin:0 0 12px;font-size:20px">O que o CONTAX faz</h2>
+      <div class="features">
+        <div class="card">
+          <div class="icon-wrap center" aria-hidden="true">
+            <!-- notes icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 7h10M7 11h6" stroke="#00bcd4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect x="3" y="3" width="18" height="18" rx="3" stroke="rgba(255,255,255,0.04)" stroke-width="1.2"/>
+            </svg>
+          </div>
+          <h3>Gestão de Notas</h3>
+          <p>Cadastre notas por data, descrição e valor. Filtre por mês e empresa — tenha o histórico sempre à mão.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon-wrap center" aria-hidden="true">
+            <!-- das icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 20h16M6 8h12v8H6z" stroke="#00bcd4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Controle de DAS</h3>
+          <p>Registre competência, vencimento e status do DAS — acompanhe pagamentos e histórico por empresa.</p>
+        </div>
+
+        <div class="card">
+          <div class="icon-wrap center" aria-hidden="true">
+            <!-- dashboard icon -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 13h8M13 7h8M13 19h8" stroke="#00bcd4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Painel Intuitivo</h3>
+          <p>Resumo financeiro por período, total por empresa e tabelas interativas com ações administrativas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- benefits / CTA -->
+    <section id="beneficios" style="margin-top:8px">
+      <h2 style="margin:0 0 12px;font-size:20px">Por que usar o CONTAX?</h2>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px;align-items:center">
+        <div>
+          <p class="muted" style="margin-top:0">CONTAX foi pensado para microempresas e empreendedores individuais que precisam controlar notas e tributos sem depender de procedimentos manuais. Ele ajuda a:</p>
+          <ul style="color:var(--muted);line-height:1.7">
+            <li>Evitar surpresas com limites mensais — monitore receitas por competência;</li>
+            <li>Centralizar histórico de DAS e comprovantes;</li>
+            <li>Ter um painel limpo para tomar decisões rápidas.</li>
+          </ul>
+
+          <div style="margin-top:12px">
+            <a class="btn" href="index.html">Acessar o Sistema — Começar</a>
+            <a class="btn ghost" href="#" onclick="alert('Em desenvolvimento — logo teremos um tour!');return false;">Solicitar demonstração</a>
+          </div>
+        </div>
+
+        <div style="background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.02)">
+          <h3 style="margin-top:0">Benefícios rápidos</h3>
+          <div style="display:grid;gap:10px;margin-top:6px">
+            <div style="display:flex;justify-content:space-between"><strong>Economia de tempo</strong><span class="muted">Automatize registros</span></div>
+            <div style="display:flex;justify-content:space-between"><strong>Organização</strong><span class="muted">Tudo em um painel</span></div>
+            <div style="display:flex;justify-content:space-between"><strong>Segurança</strong><span class="muted">Dados locais no navegador</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      • © CONTAX — Sistema em desenvolvimento •
+      <div style="margin-top:8px">Já tem a versão beta? <a href="index.html">Entrar no sistema</a></div>
+    </footer>
+  </div>
+
+  <script>
+    // Pequena interação: smooth scroll para ancoras internas e foco no botão principal
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        const t = document.querySelector(a.getAttribute('href'));
+        if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
+
+    // keyboard shortcut: press "Enter" on hero to go to system
+    document.addEventListener('keydown', e=>{
+      if(e.key === 'Enter') {
+        const btn = document.querySelector('.btn[href="index.html"]');
+        if(btn) window.location.href = 'index.html';
+      }
+    });
+  </script>
+
+    <script>
+    // --- Animação de entrada ---
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.style.opacity = 0;
+      document.body.style.transform = 'translateY(12px)';
+      document.body.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      requestAnimationFrame(() => {
+        document.body.style.opacity = 1;
+        document.body.style.transform = 'translateY(0)';
+      });
+
+      // --- Cria partículas leves no fundo ---
+      const particleCount = 16;
+      for(let i=0;i<particleCount;i++){
+        const p=document.createElement('div');
+        p.classList.add('particle');
+        const size=Math.random()*8+4; // tamanho 4–12px
+        const dur=Math.random()*20+20; // duração 20–40s
+        const x=Math.random()*100;
+        const y=Math.random()*100;
+        p.style.width=p.style.height=size+'px';
+        p.style.left=x+'%';
+        p.style.top=y+'%';
+        p.style.animationDuration=dur+'s';
+        p.style.animationDelay=(Math.random()*10)+'s';
+        document.body.appendChild(p);
+      }
+    });
+
+    // --- Transição ao acessar o sistema ---
+    document.querySelectorAll('a[href="index.html"]').forEach(btn=>{
+      btn.addEventListener('click',e=>{
+        e.preventDefault();
+        document.body.style.opacity=0;
+        document.body.style.transform='translateY(-12px)';
+        setTimeout(()=>window.location.href='index.html',600);
+      });
+    });
+
+    // --- Rolagem suave ---
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click',e=>{
+        e.preventDefault();
+        const t=document.querySelector(a.getAttribute('href'));
+        if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+      });
+    });
+
+    // --- Atalho Enter ---
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){
+        const btn=document.querySelector('.btn[href="index.html"]');
+        if(btn) btn.click();
+      }
+    });
+  </script>
+
+</body>
+</html>

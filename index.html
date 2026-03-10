@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CONTAX — Gestão de Notas ME/MEI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="contax-logo" role="img" aria-label="Logo Contax">
+        <div class="c-wrap">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#7ad9d3" />
+                <stop offset="100%" stop-color="#25bdb3" />
+              </linearGradient>
+              <radialGradient id="shine" cx="32%" cy="38%" r="35%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45"/>
+                <stop offset="70%" stop-color="#ffffff" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <circle cx="100" cy="100" r="70" fill="none" stroke="url(#g)" stroke-width="52"
+                    stroke-linecap="round" stroke-dasharray="340 99" transform="rotate(-20 100 100)"/>
+            <circle cx="72" cy="82" r="42" fill="url(#shine)"/>
+          </svg>
+        </div>
+        <div><b>CONTAX</b></div>
+        <small>ME & MEI • Dashboard</small>
+      </div>
+    </div>
+
+    <nav class="nav hide" id="navTabs">
+  <button class="tab active" data-tab="dashboard">Dashboard</button>
+
+  <!-- Abas da empresa ME -->
+  <button class="tab hide" data-tab="caixa">Caixa</button>
+  <button class="tab hide" data-tab="despesas">Despesas</button>
+  <button class="tab hide" data-tab="faturamento">Faturamento</button>
+  <button class="tab hide" data-tab="imposto">Imposto</button>
+  <button class="tab hide" data-tab="notas-emitidas-me">Notas Emitidas</button>
+
+  <!-- Abas da empresa MEI -->
+  <button class="tab hide" data-tab="imposto-das">Imposto (DAS)</button>
+  <button class="tab hide" data-tab="notas-emitidas-mei">Notas Emitidas</button>
+  <button class="tab hide" data-tab="controle-mensal">Controle Mensal</button>
+
+  <!-- ADMIN -->
+  <button class="tab hide" data-tab="empresas-me" id="tabEmpresasME">Empresas ME</button>
+  <button class="tab hide" data-tab="empresas-mei" id="tabEmpresasMEI">Empresas MEI</button>
+  <button class="tab hide" data-tab="empresas" id="tabEmpresas">Empresas (Admin)</button>
+  <button class="tab hide" data-tab="notas" id="tabNotas">Notas Fiscais</button>
+</nav>
+
+    <div class="spacer"></div>
+    <div id="who" class="muted"></div>
+    <button id="toggleTheme" class="out">🌙</button>
+    <button class="out hide" id="btnStopAccess">Voltar</button>
+    <button class="out hide" id="btnLogout">Sair</button>
+  </header>
+
+  <!-- LOGIN -->
+ <main class="wrap" id="screenLogin">
+  <div class="login pro">
+    <div class="login-header">
+      <div class="login-logo">
+        <div class="logo"></div>
+        <h1>CONTAX</h1>
+        <p>Gestão ME & MEI</p>
+      </div>
+    </div>
+
+    <h2>Bem-vindo(a) 👋</h2>
+    <p class="sub">Acesse o sistema com suas credenciais abaixo.</p>
+  
+    <form id="formLogin">
+  <div id="loginError" class="login-error hide"></div>
+
+  <label for="role">Entrar como</label>
+  <select id="role" required>
+    <option value="admin">Administrador</option>
+    <option value="empresa">Empresa</option>
+  </select>
+
+  <div id="loginAdmin">
+    <label for="adminPass">Senha do administrador</label>
+    <input id="adminPass" type="password" placeholder="••••••••" />
+  </div>
+
+  <div style="margin-top:6px;display:flex;align-items:center;gap:6px">
+  <input type="checkbox" id="toggleAdminPass" />
+  <label for="toggleAdminPass" style="font-size:13px;color:var(--muted)">Mostrar senha</label>
+</div>
+
+
+  <div id="loginEmpresa" class="hide">
+    <label for="empresaCnpj">CNPJ da Empresa</label>
+    <input id="empresaCnpj" type="text" placeholder="00.000.000/0001-00" maxlength="18" required />
+    
+    <label for="empresaPass">Senha</label>
+    <input id="empresaPass" type="password" placeholder="••••••••" required />
+  </div>
+
+  <button type="submit" class="login-btn">Entrar no sistema</button>
+</form>
+
+
+    <div class="login-footer">
+      <small>© CONTAX — Sistema ME & MEI</small>
+    </div>
+  </div>
+</main>
+
+
+  <!-- APP -->
+  <main class="wrap hide" id="screenApp">
+
+    <!-- DASHBOARD -->
+    <section id="tab-dashboard" class="cards">
+      <article class="card sm-8">
+        <h3>Visão Geral — <span id="monthLabel"></span></h3>
+        <div class="content" id="dashboardResumo">
+          <div class="muted">Nenhum dado encontrado.</div>
+        </div>
+      </article>
+
+      <article class="card sm-4">
+        <h3>Filtro</h3>
+        <div class="content">
+          <form id="formFiltro">
+            <label for="mes">Mês</label>
+            <input type="month" id="mes" />
+
+            <div id="filtroEmpresaWrap">
+              <label for="filtroEmpresa">Empresa</label>
+              <select id="filtroEmpresa"></select>
+            </div>
+
+            <button type="submit">Aplicar</button>
+          </form>
+        </div>
+      </article>
+
+      <article class="card sm-12">
+        <h3>Notas Fiscais do período</h3>
+        <div class="content">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Empresa</th>
+                <th>Descrição</th>
+                <th class="right">Valor (R$)</th>
+              </tr>
+            </thead>
+            <tbody id="tNotasPeriodo"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- EMPRESAS (ADMIN) - CRUD geral -->
+    <section id="tab-empresas" class="cards hide">
+      <article class="card sm-5">
+        <h3>Cadastrar Empresa</h3>
+        <div class="content">
+          <form id="formEmpresa">
+            <div class="row cols-2">
+              <div>
+                <label for="nomeEmp">Nome</label>
+                <input id="nomeEmp" required placeholder="Ex.: Acme LTDA" />
+              </div>
+              <div>
+                <label for="cnpjEmp">CNPJ</label>
+                <input id="cnpjEmp" required maxlength="18" minlength="14" placeholder="00.000.000/0001-00" />
+              </div>
+            </div>
+            <div class="row cols-2">
+              <div>
+                <label for="tipoEmp">Tipo</label>
+                <select id="tipoEmp">
+                  <option value="MEI">MEI</option>
+                  <option value="ME">ME</option>
+                </select>
+              </div>
+              <div>
+                <label for="limiteMensal">Limite Mensal (R$)</label>
+                <input id="limiteMensal" type="number" min="0" step="0.01" placeholder="Ex.: 6750 para MEI" />
+              </div>
+            </div>
+            <div>
+              <label for="senhaEmp">Senha da empresa</label>
+              <input id="senhaEmp" type="password" required minlength="4" maxlength="32" placeholder="Crie uma senha" />
+            </div>
+            <button type="submit">Salvar Empresa</button>
+          </form>
+        </div>
+      </article>
+
+      <article class="card sm-7">
+        <h3>Empresas Cadastradas</h3>
+        <div class="content">
+          <table>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Limite Mensal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tEmpresas"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- NOTAS (ADMIN) -->
+    <section id="tab-notas" class="cards hide">
+      <article class="card sm-5">
+        <h3>Lançar Nota Fiscal (apenas Admin)</h3>
+        <div class="content">
+          <form id="formNota">
+            <label for="empresaNF">Empresa</label>
+            <select id="empresaNF"></select>
+
+            <label for="anexoNF">Anexar Nota Fiscal (PDF)</label>
+            <input id="anexoNF" type="file" accept="application/pdf" />
+
+
+            <div class="row cols-2">
+              <div>
+                <label for="dataNF">Data</label>
+                <input id="dataNF" type="date" />
+              </div>
+              <div>
+                <label for="valorNF">Valor (R$)</label>
+                <input id="valorNF" type="number" min="0" step="0.01" />
+              </div>
+            </div>
+
+            <label for="descNF">Descrição</label>
+            <input id="descNF" placeholder="Serviço, venda, etc." />
+
+            <button type="submit">Lançar Nota</button>
+          </form>
+        </div>
+      </article>
+
+      <article class="card sm-7">
+        <h3>Notas Fiscais (todas)</h3>
+        <div class="content">
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Empresa</th>
+                <th>Descrição</th>
+                <th class="right">Valor (R$)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tNotas"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <!-- Global feature sections (rendered inside each company's view via JS) -->
+    <section id="tab-caixa" class="cards hide">
+      <article class="card sm-12">
+        <h3>Caixa</h3>
+        <div class="content" id="caixaContent">Conteúdo Caixa ME</div>
+      </article>
+    </section>
+
+    <section id="tab-despesas" class="cards hide">
+      <article class="card sm-12">
+        <h3>Despesas</h3>
+        <div class="content" id="despesasContent">Conteúdo Despesas ME</div>
+      </article>
+    </section>
+
+    <section id="tab-faturamento" class="cards hide">
+      <article class="card sm-12">
+        <h3>Faturamento</h3>
+        <div class="content" id="faturamentoContent">Conteúdo Faturamento ME</div>
+      </article>
+    </section>
+
+    <section id="tab-imposto" class="cards hide">
+      <article class="card sm-12">
+        <h3>Imposto</h3>
+        <div class="content" id="impostoContent">Conteúdo Imposto ME</div>
+      </article>
+    </section>
+
+    <section id="tab-notas-emitidas-me" class="cards hide">
+      <article class="card sm-12">
+        <h3>Notas Fiscais Emitidas</h3>
+        <div class="content" id="notasEmitidasMEContent">Conteúdo Notas Emitidas ME</div>
+      </article>
+    </section>
+
+    <section id="tab-imposto-das" class="cards hide">
+      <article class="card sm-12">
+        <h3>Imposto DAS — Controle MEI</h3>
+        <div class="content">
+          <form id="formDAS" class="admin-only">
+            <div>
+              <label for="dasEmpresaSelect">Empresa (apenas Admin)</label>
+              <select id="dasEmpresaSelect"></select>
+            </div>
+
+            <div class="row cols-2">
+              <div>
+                <label for="dasCompetencia">Competência</label>
+                <input id="dasCompetencia" type="month" required />
+              </div>
+              <div>
+                <label for="dasValor">Valor do DAS</label>
+                <input id="dasValor" type="number" min="0" step="0.01" required placeholder="Valor gerado pelo Simples Nacional" />
+              </div>
+            </div>
+            <div class="row cols-2">
+              <div>
+                <label for="dasVencimento">Vencimento</label>
+                <input id="dasVencimento" type="date" required />
+              </div>
+              <div>
+                <label for="dasPagamento">Data de pagamento</label>
+                <input id="dasPagamento" type="date" />
+              </div>
+            </div>
+            <div class="row cols-2">
+              <div>
+                <label for="dasStatus">Status</label>
+                <select id="dasStatus" required>
+                  <option value="pago">Pago</option> 
+                  <option value="pendente">Pendente</option>
+                  <option value="atraso">Em atraso</option>
+                </select>
+              </div>
+              <div>
+                <label for="dasObs">Observações</label>
+                <input id="dasObs" placeholder="Anotações, justificativas, etc." />
+              </div>
+            </div>
+            <div>
+              <label for="dasAnexo">Anexar boleto/comprovante (PDF)</label>
+              <input id="dasAnexo" type="file" accept="application/pdf" />
+            </div>
+            <button type="submit">Salvar DAS</button>
+            <a href="https://www8.receita.fazenda.gov.br/SimplesNacional" target="_blank" style="margin-left:12px;">Gerar DAS no site oficial</a>
+          </form>
+
+          <hr />
+          <h4>Resumo Anual / Histórico (visualização)</h4>
+          <div id="dasResumo"></div>
+        </div>
+      </article>
+    </section>
+
+    <section id="tab-notas-emitidas-mei" class="cards hide">
+      <article class="card sm-12">
+        <h3>Notas Emitidas</h3>
+        <div class="content" id="notasEmitidasMEIContent">Conteúdo Notas Emitidas MEI</div>
+      </article>
+    </section>
+
+    <section id="tab-controle-mensal" class="cards hide">
+      <article class="card sm-12">
+        <h3>Controle Mensal</h3>
+        <div class="content" id="controleMensalContent">Conteúdo Controle Mensal MEI</div>
+      </article>
+    </section>
+
+    <!-- EMPRESAS ME (admin) -->
+    <section id="tab-empresas-me" class="cards hide">
+      <article class="card sm-4">
+        <h3>Empresas ME</h3>
+        <div class="content">
+          <p>Selecione uma empresa ME para visualizar as abas específicas.</p>
+          <label for="selectEmpresaME">Empresa (ME)</label>
+          <select id="selectEmpresaME"></select>
+          <div style="margin-top:12px">
+            <button class="subtab" data-company-tab="caixa" data-company-type="ME">Caixa</button>
+            <button class="subtab" data-company-tab="despesas" data-company-type="ME">Despesas</button>
+            <button class="subtab" data-company-tab="faturamento" data-company-type="ME">Faturamento</button>
+            <button class="subtab" data-company-tab="imposto" data-company-type="ME">Imposto</button>
+            <button class="subtab" data-company-tab="notas-emitidas-me" data-company-type="ME">Notas Emitidas</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card sm-8">
+        <h3>Visão — Empresa ME</h3>
+        <div class="content" id="empresaMEContent">
+          <div class="muted">Selecione uma empresa e uma aba para ver o conteúdo.</div>
+        </div>
+      </article>
+    </section>
+
+    <!-- EMPRESAS MEI (admin) -->
+    <section id="tab-empresas-mei" class="cards hide">
+      <article class="card sm-4">
+        <h3>Empresas MEI</h3>
+        <div class="content">
+          <p>Selecione uma empresa MEI para visualizar as abas específicas.</p>
+          <label for="selectEmpresaMEI">Empresa (MEI)</label>
+          <select id="selectEmpresaMEI"></select>
+          <div style="margin-top:12px">
+            <button class="subtab" data-company-tab="imposto-das" data-company-type="MEI">Imposto DAS</button>
+            <button class="subtab" data-company-tab="notas-emitidas-mei" data-company-type="MEI">Notas Emitidas</button>
+            <button class="subtab" data-company-tab="controle-mensal" data-company-type="MEI">Controle Mensal</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="card sm-8">
+        <h3>Visão — Empresa MEI</h3>
+        <div class="content" id="empresaMEIContent">
+          <div class="muted">Selecione uma empresa e uma aba para ver o conteúdo.</div>
+        </div>
+      </article>
+    </section>
+
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
