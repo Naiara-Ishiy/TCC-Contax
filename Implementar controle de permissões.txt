@@ -1,0 +1,30 @@
+Implementar controle de permissões por nível de acesso.
+
+**Visualizador**
+
+* Visualizar Dashboard.
+* Visualizar Documentos.
+* Visualizar Impostos.
+* Visualizar Prazos.
+* Visualizar Faturamento.
+* Baixar documentos.
+* Não pode cadastrar, editar ou excluir informações.
+
+**Gerente**
+
+* Possui todas as permissões do Visualizador.
+* Pode enviar documentos para a contabilidade.
+* Pode enviar notas fiscais, comprovantes e guias.
+* Pode atualizar informações necessárias para o escritório contábil.
+* Não pode gerenciar usuários ou empresas.
+
+**Administrador**
+
+* Acesso total ao sistema.
+* Gerencia empresas, usuários, documentos, financeiro, impostos e prazos.
+* Pode visualizar dados de todas as empresas.
+
+**Regra geral**
+
+* Menus, botões e rotas devem respeitar o nível de acesso do usuário.
+* Usuários só podem acessar dados das empresas às quais estão vinculados.
